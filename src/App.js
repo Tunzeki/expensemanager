@@ -2,6 +2,10 @@ import { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import expenses from './ExpensesList';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSortDesc } from '@fortawesome/free-solid-svg-icons';
+
+//const element = <FontAwesomeIcon icon={faEnvelope} />
 
 function ExpensesTable({ data }) {
   // [datesort, setDateSort] = useState();
@@ -23,7 +27,7 @@ function ExpensesTable({ data }) {
   return (
     <table>
       <tr>
-        <th>Date</th>
+        <th>Date <FontAwesomeIcon icon={faSortDesc} /></th>
         <th>Merchant</th>
         <th>Total</th>
         <th>Status</th>
