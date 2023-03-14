@@ -31,6 +31,7 @@ function ExpensesTable({ data }) {
         <th>Merchant</th>
         <th>Total</th>
         <th>Status</th>
+        <th>Comment</th>
       </tr>
       {myExpenses}
     </table>
