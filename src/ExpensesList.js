@@ -1,0 +1,96 @@
+const expenses = [
+    {
+        createdAt: "2023-03-09",
+        merchant: "Hotel",
+        total: 87.08,
+        status: "In Progress",
+        comment: "Expense from my business trip",
+    },
+    {
+        createdAt: "2023-03-09",
+        merchant: "Hotel",
+        total: 635.50,
+        status: "Reimbursed",
+        comment: "Expense from my business trip",
+    },
+    {
+        createdAt: "2023-03-09",
+        merchant: "Electronics",
+        total: 198.26,
+        status: "Reimbursed",
+        comment: "Expense from my business trip",
+    },
+    {
+        createdAt: "2023-03-09",
+        merchant: "Office supplies",
+        total: 72.43,
+        status: "Reimbursed",
+        comment: "Expense from my business trip",
+    },
+    {
+        createdAt: "2023-03-09",
+        merchant: "Rental car",
+        total: 120.40,
+        status: "Reimbursed",
+        comment: "Expense from my business trip",
+    },
+    {
+        createdAt: "2023-03-09",
+        merchant: "Fast food",
+        total: 48.21,
+        status: "Reimbursed",
+        comment: "Expense from my business trip",
+    },
+    {
+        createdAt: "2023-03-09",
+        merchant: "Taxi",
+        total: 441.99,
+        status: "Reimbursed",
+        comment: "Expense from my business trip",
+    },
+    {
+        createdAt: "2023-03-09",
+        merchant: "Airline",
+        total: 400.12,
+        status: "Reimbursed",
+        comment: "Expense from my business trip",
+    },
+    {
+        createdAt: "2023-03-09",
+        merchant: "Parking",
+        total: 294.61,
+        status: "Reimbursed",
+        comment: "Expense from my business trip",
+    },
+    {
+        createdAt: "2023-03-09",
+        merchant: "Office supplies",
+        total: 160.45,
+        status: "Reimbursed",
+        comment: "Expense from my business trip",
+    },
+    {
+        createdAt: "2023-03-09",
+        merchant: "Office supplies",
+        total: 250.65,
+        status: "Reimbursed",
+        comment: "Expense from my business trip",
+    },
+    {
+        createdAt: "2023-03-09",
+        merchant: "Fast food",
+        total: 172.92,
+        status: "Reimbursed",
+        comment: "Expense from my business trip",
+    },
+    {
+        createdAt: "2023-03-08",
+        merchant: "Fast food",
+        total: 292.07,
+        status: "New",
+        comment: "Expense from my business trip",
+    },
+
+];
+
+export default expenses;
