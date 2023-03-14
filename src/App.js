@@ -3,13 +3,57 @@ import logo from './logo.svg';
 import './App.css';
 import expenses from './ExpensesList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSortDesc } from '@fortawesome/free-solid-svg-icons';
+import { faSort, faSortAsc, faSortDesc } from '@fortawesome/free-solid-svg-icons';
 
 //const element = <FontAwesomeIcon icon={faEnvelope} />
 
+const DateSortAsc = () => {
+  return (
+    <>
+      Date <FontAwesomeIcon icon={faSortAsc} />
+    </>
+  );
+};
+
+const DateSortDesc = () => {
+  return (
+    <>
+      Date <FontAwesomeIcon icon={faSortDesc} />
+    </>
+  );
+};
+
+const DateSortUpDown = () => {
+  return (
+    <>
+      Date <FontAwesomeIcon icon={faSort} />
+    </>
+  );
+};
+
 function ExpensesTable({ data }) {
-  // [datesort, setDateSort] = useState();
+  const [datesort, setDateSort] = useState(
+    {
+      value: 1,
+
+
+    }
+  );
   const dataCopy = data;
+
+  const sortDate = () => { 
+    datesort.value === 1 ? setDateSort({
+      value: 0,
+    })
+      : datesort.value === 0 ? setDateSort({
+        value: -1,
+      })
+        : setDateSort({
+          value: 1,
+        });
+    //const expensesDate === 
+
+  };
 
   // Sort date in descending order
   const myExpenses = dataCopy.sort(
@@ -30,7 +74,11 @@ function ExpensesTable({ data }) {
   return (
     <table>
       <tr>
-        <th>Date <FontAwesomeIcon icon={faSortDesc} /></th>
+        <th onClick={sortDate}>
+          {datesort.value === 1 ? <DateSortDesc />
+            : datesort.value === 0 ? <DateSortAsc />
+          : <DateSortUpDown />}
+        </th>
         <th>Merchant</th>
         <th>Total</th>
         <th>Status</th>
