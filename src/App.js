@@ -32,7 +32,7 @@ const DateSortUpDown = () => {
 };
 
 function ExpensesTable({ data }) {
-  const [datesort, setDateSort] = useState(
+  const [dateSort, setDateSort] = useState(
     {
       value: 1,
 
@@ -42,10 +42,10 @@ function ExpensesTable({ data }) {
   const dataCopy = data;
 
   const sortDate = () => { 
-    datesort.value === 1 ? setDateSort({
+    dateSort.value === 1 ? setDateSort({
       value: 0,
     })
-      : datesort.value === 0 ? setDateSort({
+      : dateSort.value === 0 ? setDateSort({
         value: -1,
       })
         : setDateSort({
@@ -75,8 +75,8 @@ function ExpensesTable({ data }) {
     <table>
       <tr>
         <th onClick={sortDate}>
-          {datesort.value === 1 ? <DateSortDesc />
-            : datesort.value === 0 ? <DateSortAsc />
+          {dateSort.value === 1 ? <DateSortDesc />
+            : dateSort.value === 0 ? <DateSortAsc />
           : <DateSortUpDown />}
         </th>
         <th>Merchant</th>
