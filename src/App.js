@@ -9,9 +9,12 @@ import { faSortDesc } from '@fortawesome/free-solid-svg-icons';
 
 function ExpensesTable({ data }) {
   // [datesort, setDateSort] = useState();
+  const dataCopy = data;
 
-
-  const myExpenses = data.map(
+  // Sort date in descending order
+  const myExpenses = dataCopy.sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  ).map(
     v => {
       return (
         <tr>
