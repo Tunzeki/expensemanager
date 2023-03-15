@@ -110,18 +110,22 @@ function ExpensesTable({ data }) {
   
   return (
     <table>
-      <tr>
-        <th onClick={sortDate}>
-          {dateSort === 1 ? <DateSortDescIcon />
-            : dateSort === 0 ? <DateSortAscIcon />
-          : <DateSortUpDownIcon />}
-        </th>
-        <th>Merchant</th>
-        <th>Total</th>
-        <th>Status</th>
-        <th>Comment</th>
-      </tr>
-      {tableSort}
+      <thead>
+        <tr>
+          <th onClick={sortDate}>
+            {dateSort === 1 ? <DateSortDescIcon />
+              : dateSort === 0 ? <DateSortAscIcon />
+                : <DateSortUpDownIcon />}
+          </th>
+          <th>Merchant</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Comment</th>
+        </tr>
+      </thead>
+      <tbody>
+        {tableSort}
+      </tbody>
     </table>
 
   );
