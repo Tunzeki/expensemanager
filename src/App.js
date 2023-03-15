@@ -32,21 +32,25 @@ const DateSortUpDownIcon = () => {
   );
 };
 
+function TableRow( {row}) {
+  return (
+    <tr>
+      <td>{row.createdAt}</td>
+      <td>{row.merchant}</td>
+      <td>{row.total}</td>
+      <td>{row.status}</td>
+      <td>{row.comment}</td>
+    </tr>
+  );
+}
+
 function SortDateDescFunction() {
   const expensesCopy = expenses;
   return expensesCopy.sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   ).map(
     v => {
-      return (
-        <tr>
-          <td>{v.createdAt}</td>
-          <td>{v.merchant}</td>
-          <td>{v.total}</td>
-          <td>{v.status}</td>
-          <td>{v.comment}</td>
-        </tr>
-      );
+      return <TableRow row={v} />;
     }
   )
 }
@@ -57,15 +61,7 @@ function SortDateAscFunction() {
     (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
   ).map(
     v => {
-      return (
-        <tr>
-          <td>{v.createdAt}</td>
-          <td>{v.merchant}</td>
-          <td>{v.total}</td>
-          <td>{v.status}</td>
-          <td>{v.comment}</td>
-        </tr>
-      );
+      return <TableRow row={v} />;
     }
   )
 }
@@ -74,15 +70,7 @@ function DontSortTableFunction() {
   const expensesCopy = expenses;
   return expensesCopy.map(
     v => {
-      return (
-        <tr>
-          <td>{v.createdAt}</td>
-          <td>{v.merchant}</td>
-          <td>{v.total}</td>
-          <td>{v.status}</td>
-          <td>{v.comment}</td>
-        </tr>
-      );
+      return <TableRow row={v} />;
     }
   )
 }
@@ -90,10 +78,7 @@ function DontSortTableFunction() {
 function ExpensesTable({ data }) {
   const [dateSort, setDateSort] = useState(0);
 
-  const [tableSort, setTableSort] = useState(() => <SortDateDescFunction />);
-
-  const dataCopy = data;
- 
+  const [tableSort, setTableSort] = useState(() => <SortDateDescFunction />); 
 
   const sortDate = () => {
     dateSort === 0 ? setDateSort(1)
