@@ -4,10 +4,11 @@ import './App.css';
 import expenses from './ExpensesList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortAsc, faSortDesc } from '@fortawesome/free-solid-svg-icons';
+import { func } from 'prop-types';
 
 //const element = <FontAwesomeIcon icon={faEnvelope} />
 
-const DateSortAsc = () => {
+const DateSortAscIcon = () => {
   return (
     <>
       Date <FontAwesomeIcon icon={faSortAsc} />
@@ -15,7 +16,7 @@ const DateSortAsc = () => {
   );
 };
 
-const DateSortDesc = () => {
+const DateSortDescIcon = () => {
   return (
     <>
       Date <FontAwesomeIcon icon={faSortDesc} />
@@ -23,7 +24,7 @@ const DateSortDesc = () => {
   );
 };
 
-const DateSortUpDown = () => {
+const DateSortUpDownIcon = () => {
   return (
     <>
       Date <FontAwesomeIcon icon={faSort} />
@@ -31,32 +32,9 @@ const DateSortUpDown = () => {
   );
 };
 
-function ExpensesTable({ data }) {
-  const [dateSort, setDateSort] = useState(
-    {
-      value: 1,
-
-
-    }
-  );
-  const dataCopy = data;
-
-  const sortDate = () => { 
-    dateSort.value === 1 ? setDateSort({
-      value: 0,
-    })
-      : dateSort.value === 0 ? setDateSort({
-        value: -1,
-      })
-        : setDateSort({
-          value: 1,
-        });
-    //const expensesDate === 
-
-  };
-
-  // Sort date in descending order
-  const myExpenses = dataCopy.sort(
+function SortDateDescFunction() {
+  const expensesCopy = expenses;
+  return expensesCopy.sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   ).map(
     v => {
@@ -70,21 +48,80 @@ function ExpensesTable({ data }) {
         </tr>
       );
     }
-  );
+  )
+}
+
+function SortDateAscFunction() {
+  const expensesCopy = expenses;
+  return expensesCopy.sort(
+    (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+  ).map(
+    v => {
+      return (
+        <tr>
+          <td>{v.createdAt}</td>
+          <td>{v.merchant}</td>
+          <td>{v.total}</td>
+          <td>{v.status}</td>
+          <td>{v.comment}</td>
+        </tr>
+      );
+    }
+  )
+}
+
+function DontSortTableFunction() {
+  const expensesCopy = expenses;
+  return expensesCopy.map(
+    v => {
+      return (
+        <tr>
+          <td>{v.createdAt}</td>
+          <td>{v.merchant}</td>
+          <td>{v.total}</td>
+          <td>{v.status}</td>
+          <td>{v.comment}</td>
+        </tr>
+      );
+    }
+  )
+}
+
+function ExpensesTable({ data }) {
+  const [dateSort, setDateSort] = useState(0);
+
+  const [tableSort, setTableSort] = useState(() => <SortDateDescFunction />);
+
+  const dataCopy = data;
+ 
+
+  const sortDate = () => {
+    dateSort === 0 ? setDateSort(1)
+      : dateSort === 1 ? setDateSort(2)
+        : setDateSort(0);
+    
+    dateSort === 0 ? setTableSort(() => <SortDateDescFunction />)
+      : dateSort === 1 ? setTableSort(() => <DontSortTableFunction />)
+        : setTableSort(() => <SortDateAscFunction />)
+               
+  }
+    
+
+  
   return (
     <table>
       <tr>
         <th onClick={sortDate}>
-          {dateSort.value === 1 ? <DateSortDesc />
-            : dateSort.value === 0 ? <DateSortAsc />
-          : <DateSortUpDown />}
+          {dateSort === 1 ? <DateSortDescIcon />
+            : dateSort === 0 ? <DateSortAscIcon />
+          : <DateSortUpDownIcon />}
         </th>
         <th>Merchant</th>
         <th>Total</th>
         <th>Status</th>
         <th>Comment</th>
       </tr>
-      {myExpenses}
+      {tableSort}
     </table>
 
   );
