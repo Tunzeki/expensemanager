@@ -1,5 +1,12 @@
 const expenses = [
     {
+        createdAt: "2023-03-05",
+        merchant: "Shuttle",
+        total: 17.22,
+        status: "New",
+        comment: "Expense from my business trip",
+    },
+    {
         createdAt: "2023-03-09",
         merchant: "Hotel",
         total: 87.08,
