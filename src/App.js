@@ -1,10 +1,8 @@
 import { useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import expenses from './ExpensesList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortAsc, faSortDesc } from '@fortawesome/free-solid-svg-icons';
-import { func } from 'prop-types';
 
 //const element = <FontAwesomeIcon icon={faEnvelope} />
 
@@ -52,6 +50,30 @@ const MerchantSortUpDownIcon = () => {
   return (
     <>
       Merchant <FontAwesomeIcon icon={faSort} />
+    </>
+  );
+};
+
+const TotalSortAscIcon = () => {
+  return (
+    <>
+      Total <FontAwesomeIcon icon={faSortAsc} />
+    </>
+  );
+};
+
+const TotalSortDescIcon = () => {
+  return (
+    <>
+      Total <FontAwesomeIcon icon={faSortDesc} />
+    </>
+  );
+};
+
+const TotalSortUpDownIcon = () => {
+  return (
+    <>
+      Total <FontAwesomeIcon icon={faSort} />
     </>
   );
 };
@@ -133,6 +155,28 @@ function SortMerchantAscFunction() {
   )
 }
 
+function SortTotalDescFunction() {
+  const expensesCopy = expenses;
+  return expensesCopy.sort(
+    (a, b) => b.total - a.total
+  ).map(
+    v => {
+      return <TableRow row={v} />;
+    }
+  )
+}
+
+function SortTotalAscFunction() {
+  const expensesCopy = expenses;
+  return expensesCopy.sort(
+    (a, b) => a.total - b.total
+  ).map(
+    v => {
+      return <TableRow row={v} />;
+    }
+  )
+}
+
 function ExpensesTable({ data }) {
   const [dateSort, setDateSort] = useState(0);
   
@@ -140,6 +184,8 @@ function ExpensesTable({ data }) {
   const [tableSort, setTableSort] = useState(() => <SortDateDescFunction />); 
 
   const [merchantSort, setMerchantSort] = useState(3);
+
+  const [totalSort, setTotalSort] = useState(6);
 
   const sortDate = () => {
     setMerchantSort(3);
@@ -166,6 +212,19 @@ function ExpensesTable({ data }) {
         : setTableSort(() => <DontSortTableFunction />)
 
   }
+
+  const sortTotal = () => {
+    setDateSort(2);
+
+    totalSort === 6 ? setTotalSort(7)
+      : totalSort === 7 ? setTotalSort(8)
+        : setTotalSort(6);
+
+    totalSort === 6 ? setTableSort(() => <SortTotalAscFunction />)
+      : totalSort === 7 ? setTableSort(() => <SortTotalDescFunction />)
+        : setTableSort(() => <DontSortTableFunction />)
+
+  }
     
 
   
@@ -183,7 +242,11 @@ function ExpensesTable({ data }) {
               : merchantSort === 4 ? <MerchantSortAscIcon />
                 : <MerchantSortUpDownIcon />}
           </th>
-          <th>Total</th>
+          <th onClick={sortTotal}>
+            {totalSort === 8 ? <TotalSortDescIcon />
+              : totalSort === 7 ? <TotalSortAscIcon />
+                : <TotalSortUpDownIcon />}
+          </th>
           <th>Status</th>
           <th>Comment</th>
         </tr>
