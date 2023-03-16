@@ -390,7 +390,7 @@ function ExpensesTable({ data }) {
 
   
   return (
-    <table>
+    <table className='table'>
       <thead>
         <tr>
           <th onClick={sortDate}>
