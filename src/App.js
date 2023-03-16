@@ -390,7 +390,7 @@ function ExpensesTable({ data }) {
 
   
   return (
-    <div className='container'>
+    <div className='container-fluid'>
       <div className='row'>
         <div className='col-2'>
 
@@ -432,6 +432,12 @@ function ExpensesTable({ data }) {
           </table>
         </div>
         <div className='col-2'>
+
+          <div className='pt-2'>
+            <small>To be reimbursed</small>
+            <hr />
+          </div>
+          
 
         </div>
 
