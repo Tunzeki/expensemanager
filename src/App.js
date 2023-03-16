@@ -78,6 +78,30 @@ const TotalSortUpDownIcon = () => {
   );
 };
 
+const StatusSortAscIcon = () => {
+  return (
+    <>
+      Status <FontAwesomeIcon icon={faSortAsc} />
+    </>
+  );
+};
+
+const StatusSortDescIcon = () => {
+  return (
+    <>
+      Status <FontAwesomeIcon icon={faSortDesc} />
+    </>
+  );
+};
+
+const StatusSortUpDownIcon = () => {
+  return (
+    <>
+      Status <FontAwesomeIcon icon={faSort} />
+    </>
+  );
+};
+
 function TableRow({ row }) {
   return (
     <tr>
@@ -177,6 +201,40 @@ function SortTotalAscFunction() {
   )
 }
 
+function SortStatusDescFunction() {
+  const expensesCopy = expenses;
+  return expensesCopy.sort(
+    (a, b) => {
+      let x = a.status.toLowerCase();
+      let y = b.status.toLowerCase();
+      if (x < y) { return 1; }
+      if (x > y) { return -1; }
+      return 0;
+    }
+  ).map(
+    v => {
+      return <TableRow row={v} />;
+    }
+  )
+}
+
+function SortStatusAscFunction() {
+  const expensesCopy = expenses;
+  return expensesCopy.sort(
+    (a, b) => {
+      let x = a.status.toLowerCase();
+      let y = b.status.toLowerCase();
+      if (x < y) { return -1; }
+      if (x > y) { return 1; }
+      return 0;
+    }
+  ).map(
+    v => {
+      return <TableRow row={v} />;
+    }
+  )
+}
+
 function ExpensesTable({ data }) {
   const [dateSort, setDateSort] = useState(0);
   
@@ -187,9 +245,12 @@ function ExpensesTable({ data }) {
 
   const [totalSort, setTotalSort] = useState(6);
 
+  const [statusSort, setStatusSort] = useState(9);
+
   const sortDate = () => {
     setMerchantSort(3);
     setTotalSort(6);
+    setStatusSort(9);
     
     dateSort === 0 ? setDateSort(1)
       : dateSort === 1 ? setDateSort(2)
@@ -204,6 +265,7 @@ function ExpensesTable({ data }) {
   const sortMerchant = () => {
     setDateSort(2);
     setTotalSort(6);
+    setStatusSort(9);
 
     merchantSort === 3 ? setMerchantSort(4)
       : merchantSort === 4 ? setMerchantSort(5)
@@ -218,6 +280,7 @@ function ExpensesTable({ data }) {
   const sortTotal = () => {
     setDateSort(2);
     setMerchantSort(3);
+    setStatusSort(9);
 
     totalSort === 6 ? setTotalSort(7)
       : totalSort === 7 ? setTotalSort(8)
@@ -225,6 +288,21 @@ function ExpensesTable({ data }) {
 
     totalSort === 6 ? setTableSort(() => <SortTotalAscFunction />)
       : totalSort === 7 ? setTableSort(() => <SortTotalDescFunction />)
+        : setTableSort(() => <DontSortTableFunction />)
+
+  }
+
+  const sortStatus = () => {
+    setDateSort(2);
+    setMerchantSort(3);
+    setTotalSort(6);
+
+    statusSort === 9 ? setStatusSort(10)
+      : statusSort === 10 ? setStatusSort(11)
+        : setStatusSort(9);
+
+    statusSort === 9 ? setTableSort(() => <SortStatusAscFunction />)
+      : statusSort === 10 ? setTableSort(() => <SortStatusDescFunction />)
         : setTableSort(() => <DontSortTableFunction />)
 
   }
@@ -250,7 +328,11 @@ function ExpensesTable({ data }) {
               : totalSort === 7 ? <TotalSortAscIcon />
                 : <TotalSortUpDownIcon />}
           </th>
-          <th>Status</th>
+          <th onClick={sortStatus}>
+            {statusSort === 11 ? <StatusSortDescIcon />
+              : statusSort === 10 ? <StatusSortAscIcon />
+                : <StatusSortUpDownIcon />}
+          </th>
           <th>Comment</th>
         </tr>
       </thead>
