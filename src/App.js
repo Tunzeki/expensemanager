@@ -131,7 +131,7 @@ function TableRow({ row }) {
     <tr>
       <td>{row.createdAt}</td>
       <td>{row.merchant}</td>
-      <td>{row.total}</td>
+      <td>${row.total}</td>
       <td>{row.status}</td>
       <td>{row.comment}</td>
     </tr>
