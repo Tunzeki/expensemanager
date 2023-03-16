@@ -102,6 +102,30 @@ const StatusSortUpDownIcon = () => {
   );
 };
 
+const CommentSortAscIcon = () => {
+  return (
+    <>
+      Comment <FontAwesomeIcon icon={faSortAsc} />
+    </>
+  );
+};
+
+const CommentSortDescIcon = () => {
+  return (
+    <>
+      Comment <FontAwesomeIcon icon={faSortDesc} />
+    </>
+  );
+};
+
+const CommentSortUpDownIcon = () => {
+  return (
+    <>
+      Comment <FontAwesomeIcon icon={faSort} />
+    </>
+  );
+};
+
 function TableRow({ row }) {
   return (
     <tr>
@@ -235,6 +259,40 @@ function SortStatusAscFunction() {
   )
 }
 
+function SortCommentDescFunction() {
+  const expensesCopy = expenses;
+  return expensesCopy.sort(
+    (a, b) => {
+      let x = a.comment.toLowerCase();
+      let y = b.comment.toLowerCase();
+      if (x < y) { return 1; }
+      if (x > y) { return -1; }
+      return 0;
+    }
+  ).map(
+    v => {
+      return <TableRow row={v} />;
+    }
+  )
+}
+
+function SortCommentAscFunction() {
+  const expensesCopy = expenses;
+  return expensesCopy.sort(
+    (a, b) => {
+      let x = a.comment.toLowerCase();
+      let y = b.comment.toLowerCase();
+      if (x < y) { return -1; }
+      if (x > y) { return 1; }
+      return 0;
+    }
+  ).map(
+    v => {
+      return <TableRow row={v} />;
+    }
+  )
+}
+
 function ExpensesTable({ data }) {
   const [dateSort, setDateSort] = useState(0);
   
@@ -247,10 +305,13 @@ function ExpensesTable({ data }) {
 
   const [statusSort, setStatusSort] = useState(9);
 
+  const [commentSort, setCommentSort] = useState(12);
+
   const sortDate = () => {
     setMerchantSort(3);
     setTotalSort(6);
     setStatusSort(9);
+    setCommentSort(12);
     
     dateSort === 0 ? setDateSort(1)
       : dateSort === 1 ? setDateSort(2)
@@ -266,6 +327,7 @@ function ExpensesTable({ data }) {
     setDateSort(2);
     setTotalSort(6);
     setStatusSort(9);
+    setCommentSort(12);
 
     merchantSort === 3 ? setMerchantSort(4)
       : merchantSort === 4 ? setMerchantSort(5)
@@ -281,6 +343,7 @@ function ExpensesTable({ data }) {
     setDateSort(2);
     setMerchantSort(3);
     setStatusSort(9);
+    setCommentSort(12);
 
     totalSort === 6 ? setTotalSort(7)
       : totalSort === 7 ? setTotalSort(8)
@@ -296,6 +359,7 @@ function ExpensesTable({ data }) {
     setDateSort(2);
     setMerchantSort(3);
     setTotalSort(6);
+    setCommentSort(12);
 
     statusSort === 9 ? setStatusSort(10)
       : statusSort === 10 ? setStatusSort(11)
@@ -303,6 +367,22 @@ function ExpensesTable({ data }) {
 
     statusSort === 9 ? setTableSort(() => <SortStatusAscFunction />)
       : statusSort === 10 ? setTableSort(() => <SortStatusDescFunction />)
+        : setTableSort(() => <DontSortTableFunction />)
+
+  }
+
+  const sortComment = () => {
+    setDateSort(2);
+    setMerchantSort(3);
+    setTotalSort(6);
+    setStatusSort(9);
+
+    commentSort === 12 ? setCommentSort(13)
+      : commentSort === 13 ? setCommentSort(14)
+        : setCommentSort(12);
+
+    commentSort === 12 ? setTableSort(() => <SortCommentAscFunction />)
+      : commentSort === 13 ? setTableSort(() => <SortCommentDescFunction />)
         : setTableSort(() => <DontSortTableFunction />)
 
   }
@@ -333,7 +413,11 @@ function ExpensesTable({ data }) {
               : statusSort === 10 ? <StatusSortAscIcon />
                 : <StatusSortUpDownIcon />}
           </th>
-          <th>Comment</th>
+          <th onClick={sortComment}>
+            {commentSort === 14 ? <CommentSortDescIcon />
+              : commentSort === 13 ? <CommentSortAscIcon />
+                : <CommentSortUpDownIcon />}
+          </th>
         </tr>
       </thead>
       <tbody>
