@@ -437,6 +437,13 @@ function ExpensesTable({ data }) {
             <small>To be reimbursed</small>
             <hr />
           </div>
+          <div>
+            ${ 
+              expenses.filter(
+                (a) => a.status === "New"
+              ).reduce((x,y) => x + y.total, 0).toFixed(2)
+            }
+          </div>
           
 
         </div>
