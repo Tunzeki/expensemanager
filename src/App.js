@@ -189,6 +189,7 @@ function ExpensesTable({ data }) {
 
   const sortDate = () => {
     setMerchantSort(3);
+    setTotalSort(6);
     
     dateSort === 0 ? setDateSort(1)
       : dateSort === 1 ? setDateSort(2)
@@ -202,6 +203,7 @@ function ExpensesTable({ data }) {
 
   const sortMerchant = () => {
     setDateSort(2);
+    setTotalSort(6);
 
     merchantSort === 3 ? setMerchantSort(4)
       : merchantSort === 4 ? setMerchantSort(5)
@@ -215,6 +217,7 @@ function ExpensesTable({ data }) {
 
   const sortTotal = () => {
     setDateSort(2);
+    setMerchantSort(3);
 
     totalSort === 6 ? setTotalSort(7)
       : totalSort === 7 ? setTotalSort(8)
