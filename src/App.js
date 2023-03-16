@@ -390,40 +390,54 @@ function ExpensesTable({ data }) {
 
   
   return (
-    <table className='table'>
-      <thead>
-        <tr>
-          <th onClick={sortDate}>
-            {dateSort === 1 ? <DateSortDescIcon />
-              : dateSort === 0 ? <DateSortAscIcon />
-                : <DateSortUpDownIcon />}
-          </th>
-          <th onClick={sortMerchant}>
-            {merchantSort === 5 ? <MerchantSortDescIcon />
-              : merchantSort === 4 ? <MerchantSortAscIcon />
-                : <MerchantSortUpDownIcon />}
-          </th>
-          <th onClick={sortTotal}>
-            {totalSort === 8 ? <TotalSortDescIcon />
-              : totalSort === 7 ? <TotalSortAscIcon />
-                : <TotalSortUpDownIcon />}
-          </th>
-          <th onClick={sortStatus}>
-            {statusSort === 11 ? <StatusSortDescIcon />
-              : statusSort === 10 ? <StatusSortAscIcon />
-                : <StatusSortUpDownIcon />}
-          </th>
-          <th onClick={sortComment}>
-            {commentSort === 14 ? <CommentSortDescIcon />
-              : commentSort === 13 ? <CommentSortAscIcon />
-                : <CommentSortUpDownIcon />}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {tableSort}
-      </tbody>
-    </table>
+    <div className='container'>
+      <div className='row'>
+        <div className='col-2'>
+
+        </div>
+        <div className='col-8'>
+          <table className='table'>
+            <thead>
+              <tr>
+                <th onClick={sortDate}>
+                  {dateSort === 1 ? <DateSortDescIcon />
+                    : dateSort === 0 ? <DateSortAscIcon />
+                      : <DateSortUpDownIcon />}
+                </th>
+                <th onClick={sortMerchant}>
+                  {merchantSort === 5 ? <MerchantSortDescIcon />
+                    : merchantSort === 4 ? <MerchantSortAscIcon />
+                      : <MerchantSortUpDownIcon />}
+                </th>
+                <th onClick={sortTotal}>
+                  {totalSort === 8 ? <TotalSortDescIcon />
+                    : totalSort === 7 ? <TotalSortAscIcon />
+                      : <TotalSortUpDownIcon />}
+                </th>
+                <th onClick={sortStatus}>
+                  {statusSort === 11 ? <StatusSortDescIcon />
+                    : statusSort === 10 ? <StatusSortAscIcon />
+                      : <StatusSortUpDownIcon />}
+                </th>
+                <th onClick={sortComment}>
+                  {commentSort === 14 ? <CommentSortDescIcon />
+                    : commentSort === 13 ? <CommentSortAscIcon />
+                      : <CommentSortUpDownIcon />}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {tableSort}
+            </tbody>
+          </table>
+        </div>
+        <div className='col-2'>
+
+        </div>
+
+      </div>
+    </div>
+    
 
   );
 }
