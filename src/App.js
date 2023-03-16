@@ -142,6 +142,8 @@ function ExpensesTable({ data }) {
   const [merchantSort, setMerchantSort] = useState(3);
 
   const sortDate = () => {
+    setMerchantSort(3);
+    
     dateSort === 0 ? setDateSort(1)
       : dateSort === 1 ? setDateSort(2)
         : setDateSort(0);
