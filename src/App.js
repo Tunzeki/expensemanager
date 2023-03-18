@@ -294,20 +294,27 @@ function SortCommentAscFunction() {
 }
 
 function ExpensesForm() {
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
+  const [min, setMin] = useState(null);
+  const [max, setMax] = useState(null);
+  const [merchant, setMerchant] = useState(null);
+  const [status, setStatus] = useState(null);
+
   return (
     <form>
       <div>
         <label for='from' className='form-label'>From</label>
-        <input type="date" id='from' className='form-control' />
+        <input type="date" id='from' value={fromDate} className='form-control' />
       </div>
       <div>
         <label for='to' className='form-label'>To</label>
-        <input type="date" id='to' className='form-control' />
+        <input type="date" id='to' value={toDate} className='form-control' />
       </div>
       <div className='row'>
         <div className='col-5'>
           <label for='min' className='form-label'>Min</label>
-          <input type="number" id='min' className='form-control' />
+          <input type="number" id='min' value={min} className='form-control' />
         </div>
         <div className='col-1'>
           <label className='form-label'></label>
@@ -315,12 +322,12 @@ function ExpensesForm() {
         </div>
         <div className='col-5'>
           <label for='max' className='form-label'>Max</label>
-          <input type="number" id='max' className='form-control' />
+          <input type="number" id='max' value={max} className='form-control' />
         </div>
       </div>
       <div>
         <label for='to' className='form-label'>Merchant</label>
-        <select id='to' className='form-select'>
+        <select id='to' value={merchant} className='form-select'>
           <option value='shuttle'>Shuttle</option>
           <option value='fast food'>Fast food</option>
           <option value='electronics'>Electronics</option>
@@ -453,68 +460,81 @@ function ExpensesTable({ data }) {
 
   
   return (
-    <div className='container-fluid'>
-      <div className='row'>
-        <div className='col-3'>
-          <ExpensesForm />
-        </div>
-        <div className='col-7'>
-          <table className='table'>
-            <thead>
-              <tr>
-                <th onClick={sortDate}>
-                  {dateSort === 1 ? <DateSortDescIcon />
-                    : dateSort === 0 ? <DateSortAscIcon />
-                      : <DateSortUpDownIcon />}
-                </th>
-                <th onClick={sortMerchant}>
-                  {merchantSort === 5 ? <MerchantSortDescIcon />
-                    : merchantSort === 4 ? <MerchantSortAscIcon />
-                      : <MerchantSortUpDownIcon />}
-                </th>
-                <th onClick={sortTotal}>
-                  {totalSort === 8 ? <TotalSortDescIcon />
-                    : totalSort === 7 ? <TotalSortAscIcon />
-                      : <TotalSortUpDownIcon />}
-                </th>
-                <th onClick={sortStatus}>
-                  {statusSort === 11 ? <StatusSortDescIcon />
-                    : statusSort === 10 ? <StatusSortAscIcon />
-                      : <StatusSortUpDownIcon />}
-                </th>
-                <th onClick={sortComment}>
-                  {commentSort === 14 ? <CommentSortDescIcon />
-                    : commentSort === 13 ? <CommentSortAscIcon />
-                      : <CommentSortUpDownIcon />}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {tableSort}
-            </tbody>
-          </table>
-        </div>
-        <div className='col-2'>
-
-          <div className='pt-2'>
-            <small>To be reimbursed</small>
-            <hr />
-          </div>
+    <div>
+      <nav className="navbar bg-dark navbar-dark py-3">
+        <div className="container-fluid">
+          <span className="navbar-brand">Expense Manager</span>
           <div>
-            ${ 
-              expenses.filter(
-                (a) => a.status === "New"
-              ).reduce((x,y) => x + y.total, 0).toFixed(2)
-            }
+            <button type="button" className="btn btn-secondary text-primary me-3">INFO</button>
+            <button type="button" className="btn btn-secondary text-primary">LOGOUT</button>
           </div>
-          
 
         </div>
+        
 
+      </nav>
+      <div className='container-fluid'>
+        <div className='row'>
+          <div className='col-3'>
+            <ExpensesForm />
+          </div>
+          <div className='col-7'>
+            <table className='table'>
+              <thead>
+                <tr>
+                  <th onClick={sortDate}>
+                    {dateSort === 1 ? <DateSortDescIcon />
+                      : dateSort === 0 ? <DateSortAscIcon />
+                        : <DateSortUpDownIcon />}
+                  </th>
+                  <th onClick={sortMerchant}>
+                    {merchantSort === 5 ? <MerchantSortDescIcon />
+                      : merchantSort === 4 ? <MerchantSortAscIcon />
+                        : <MerchantSortUpDownIcon />}
+                  </th>
+                  <th onClick={sortTotal}>
+                    {totalSort === 8 ? <TotalSortDescIcon />
+                      : totalSort === 7 ? <TotalSortAscIcon />
+                        : <TotalSortUpDownIcon />}
+                  </th>
+                  <th onClick={sortStatus}>
+                    {statusSort === 11 ? <StatusSortDescIcon />
+                      : statusSort === 10 ? <StatusSortAscIcon />
+                        : <StatusSortUpDownIcon />}
+                  </th>
+                  <th onClick={sortComment}>
+                    {commentSort === 14 ? <CommentSortDescIcon />
+                      : commentSort === 13 ? <CommentSortAscIcon />
+                        : <CommentSortUpDownIcon />}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {tableSort}
+              </tbody>
+            </table>
+          </div>
+          <div className='col-2'>
+
+            <div className='pt-2'>
+              <small>To be reimbursed</small>
+              <hr />
+            </div>
+            <div>
+              ${
+                expenses.filter(
+                  (a) => a.status === "New"
+                ).reduce((x, y) => x + y.total, 0).toFixed(2)
+              }
+            </div>
+
+
+          </div>
+
+        </div>
       </div>
     </div>
     
-
   );
 }
 
