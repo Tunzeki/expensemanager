@@ -303,6 +303,15 @@ function ExpensesForm() {
 
   return (
     <form>
+      <div className='mt-3'>
+        <div className="small d-flex justify-content-between">
+          <span>Filter Expenses</span>
+          <a className="text-primary text-decoration-none">Clear Filters</a>
+          {/* <button type="button" className="btn text-primary">Clear Filters</button> */}
+        </div>
+        
+        <hr />
+      </div>
       <div>
         <label for='from' className='form-label mt-3'>From</label>
         <input type="date" id='from' value={fromDate} className='form-control' />
