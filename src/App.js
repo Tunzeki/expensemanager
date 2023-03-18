@@ -304,30 +304,30 @@ function ExpensesForm() {
   return (
     <form>
       <div>
-        <label for='from' className='form-label'>From</label>
+        <label for='from' className='form-label mt-3'>From</label>
         <input type="date" id='from' value={fromDate} className='form-control' />
       </div>
       <div>
-        <label for='to' className='form-label'>To</label>
+        <label for='to' className='form-label mt-3'>To</label>
         <input type="date" id='to' value={toDate} className='form-control' />
       </div>
       <div className='row'>
         <div className='col-5'>
-          <label for='min' className='form-label'>Min</label>
+          <label for='min' className='form-label mt-3'>Min</label>
           <input type="number" id='min' value={min} className='form-control' />
         </div>
         <div className='col-1'>
-          <label className='form-label'></label>
-          <input type="text" value='-' className='form-control-plaintext' disabled />
+          <label className='form-label mt-3'></label>
+          <input type="text" value='-' className='form-control-plaintext mt-3' disabled />
         </div>
         <div className='col-5'>
-          <label for='max' className='form-label'>Max</label>
+          <label for='max' className='form-label mt-3'>Max</label>
           <input type="number" id='max' value={max} className='form-control' />
         </div>
       </div>
       <div>
-        <label for='to' className='form-label'>Merchant</label>
-        <select id='to' value={merchant} className='form-select'>
+        <label for='merchant' className='form-label mt-3'>Merchant</label>
+        <select id='merchant' value={merchant} className='form-select'>
           <option value='shuttle'>Shuttle</option>
           <option value='fast food'>Fast food</option>
           <option value='electronics'>Electronics</option>
@@ -343,6 +343,7 @@ function ExpensesForm() {
         </select>
       </div>
       <div>
+        <label for='' className='form-check-label mt-3'>Status</label>
         <div className="form-check">
           <input type="checkbox" value='new' className="form-check-input" checked/>
           <label className='form-check-label'>New</label>
@@ -474,7 +475,7 @@ function ExpensesTable({ data }) {
 
       </nav>
       <div className='container-fluid'>
-        <div className='row'>
+        <div className='row text-start'>
           <div className='col-3'>
             <ExpensesForm />
           </div>
