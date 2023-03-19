@@ -765,7 +765,8 @@ function ExpensesForm() {
                 </div> */}
               </form>
           </div>
-          <div className='col-7'>
+        <div className='col-7'>
+          <div className="table-responsive">
             <table className='table'>
               <thead>
                 <tr>
@@ -797,22 +798,23 @@ function ExpensesForm() {
                 </tr>
               </thead>
               <tbody>
-              {/* {tableSort} */}
-              {expenses.map((a) => {
-                return (
-                  <tr>
-                    <td>{a.createdAt}</td>
-                    <td>{a.merchant}</td>
-                    <td>{a.total}</td>
-                    <td>{a.status}</td>
-                    <td>{a.comment}</td>
-                  </tr>
-                );
+                {/* {tableSort} */}
+                {expenses.map((a) => {
+                  return (
+                    <tr>
+                      <td>{a.createdAt}</td>
+                      <td>{a.merchant}</td>
+                      <td>{a.total}</td>
+                      <td>{a.status}</td>
+                      <td>{a.comment}</td>
+                    </tr>
+                  );
 
-              })}
-                
+                })}
+
               </tbody>
             </table>
+          </div>
             
             {/* <ExpensesTable data={expenses} /> */} 
           </div>
