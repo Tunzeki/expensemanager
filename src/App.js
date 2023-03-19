@@ -821,7 +821,7 @@ function ExpensesForm() {
                 <small>To be reimbursed</small>
                 <hr />
               </div>
-              <div>
+              <div className="h2 m-5">
                 ${
               employeeExpenses.filter(
                     (a) => a.status === "New"
