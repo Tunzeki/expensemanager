@@ -1,4 +1,4 @@
-const expenses = [
+const employeeExpenses = [
     {
         createdAt: "03/09/2023",
         merchant: "Hotel",
@@ -701,4 +701,4 @@ const expenses = [
     },
 ];
 
-export default expenses;
+export default employeeExpenses;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './App.css';
-import expenses from './ExpensesList';
+import employeeExpenses from './ExpensesList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortAsc, faSortDesc } from '@fortawesome/free-solid-svg-icons';
 
@@ -126,258 +126,330 @@ const CommentSortUpDownIcon = () => {
   );
 };
 
-function TableRow({ row }) {
-  return (
-    <tr>
-      <td>{row.createdAt}</td>
-      <td>{row.merchant}</td>
-      <td>${row.total}</td>
-      <td>{row.status}</td>
-      <td>{row.comment}</td>
-    </tr>
-  );
-}
+// function TableRow({ row }) {
+//   return (
+//     <tr>
+//       <td>{row.createdAt}</td>
+//       <td>{row.merchant}</td>
+//       <td>${row.total}</td>
+//       <td>{row.status}</td>
+//       <td>{row.comment}</td>
+//     </tr>
+//   );
+// }
 
-function SortDateDescFunction() {
-  const expensesCopy = expenses;
-  return expensesCopy.sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-  ).map(
-    v => {
-      return <TableRow row={v} />;
-    }
-  )
-}
+// // function SortDateDescFunction({ expenses }) {
+// //   const expensesCopy = expenses;
+// //   return expensesCopy.sort(
+// //     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+// //   ).map(
+// //     v => {
+// //       return <TableRow row={v} />;
+// //     }
+// //   )
+// // }
 
-function SortDateAscFunction() {
-  const expensesCopy = expenses;
-  return expensesCopy.sort(
-    (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-  ).map(
-    v => {
-      return <TableRow row={v} />;
-    }
-  )
-}
+// // function SortDateAscFunction({ expenses }) {
+// //   const expensesCopy = expenses;
+// //   return expensesCopy.sort(
+// //     (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+// //   ).map(
+// //     v => {
+// //       return <TableRow row={v} />;
+// //     }
+// //   )
+// // }
 
-function DontSortTableFunction() {
-  const expensesCopy = expenses;
-  return expensesCopy.map(
-    v => {
-      return <TableRow row={v} />;
-    }
-  )
-}
+// // function DontSortTableFunction({ expenses }) {
+// //   const expensesCopy = expenses;
+// //   return expensesCopy.map(
+// //     v => {
+// //       return <TableRow row={v} />;
+// //     }
+// //   )
+// // }
 
-function SortMerchantDescFunction() {
-  const expensesCopy = expenses;
-  return expensesCopy.sort(
-    (a, b) => {
-      let x = a.merchant.toLowerCase();
-      let y = b.merchant.toLowerCase();
-      if (x < y) { return 1; }
-      if (x > y) { return -1; }
-      return 0;
-    }
-  ).map(
-    v => {
-      return <TableRow row={v} />;
-    }
-  )
-}
+// // function SortMerchantDescFunction({ expenses }) {
+// //   const expensesCopy = expenses;
+// //   return expensesCopy.sort(
+// //     (a, b) => {
+// //       let x = a.merchant.toLowerCase();
+// //       let y = b.merchant.toLowerCase();
+// //       if (x < y) { return 1; }
+// //       if (x > y) { return -1; }
+// //       return 0;
+// //     }
+// //   ).map(
+// //     v => {
+// //       return <TableRow row={v} />;
+// //     }
+// //   )
+// // }
 
-function SortMerchantAscFunction() {
-  const expensesCopy = expenses;
-  return expensesCopy.sort(
-    (a, b) => {
-      let x = a.merchant.toLowerCase();
-      let y = b.merchant.toLowerCase();
-      if (x < y) { return -1; }
-      if (x > y) { return 1; }
-      return 0; 
-    }
-  ).map(
-    v => {
-      return <TableRow row={v} />;
-    }
-  )
-}
+// // function SortMerchantAscFunction({ expenses }) {
+// //   const expensesCopy = expenses;
+// //   return expensesCopy.sort(
+// //     (a, b) => {
+// //       let x = a.merchant.toLowerCase();
+// //       let y = b.merchant.toLowerCase();
+// //       if (x < y) { return -1; }
+// //       if (x > y) { return 1; }
+// //       return 0; 
+// //     }
+// //   ).map(
+// //     v => {
+// //       return <TableRow row={v} />;
+// //     }
+// //   )
+// // }
 
-function SortTotalDescFunction() {
-  const expensesCopy = expenses;
-  return expensesCopy.sort(
-    (a, b) => b.total - a.total
-  ).map(
-    v => {
-      return <TableRow row={v} />;
-    }
-  )
-}
+// // function SortTotalDescFunction({ expenses }) {
+// //   const expensesCopy = expenses;
+// //   return expensesCopy.sort(
+// //     (a, b) => b.total - a.total
+// //   ).map(
+// //     v => {
+// //       return <TableRow row={v} />;
+// //     }
+// //   )
+// // }
 
-function SortTotalAscFunction() {
-  const expensesCopy = expenses;
-  return expensesCopy.sort(
-    (a, b) => a.total - b.total
-  ).map(
-    v => {
-      return <TableRow row={v} />;
-    }
-  )
-}
+// // function SortTotalAscFunction({ expenses }) {
+// //   const expensesCopy = expenses;
+// //   return expensesCopy.sort(
+// //     (a, b) => a.total - b.total
+// //   ).map(
+// //     v => {
+// //       return <TableRow row={v} />;
+// //     }
+// //   )
+// // }
 
-function SortStatusDescFunction() {
-  const expensesCopy = expenses;
-  return expensesCopy.sort(
-    (a, b) => {
-      let x = a.status.toLowerCase();
-      let y = b.status.toLowerCase();
-      if (x < y) { return 1; }
-      if (x > y) { return -1; }
-      return 0;
-    }
-  ).map(
-    v => {
-      return <TableRow row={v} />;
-    }
-  )
-}
+// // function SortStatusDescFunction({ expenses }) {
+// //   const expensesCopy = expenses;
+// //   return expensesCopy.sort(
+// //     (a, b) => {
+// //       let x = a.status.toLowerCase();
+// //       let y = b.status.toLowerCase();
+// //       if (x < y) { return 1; }
+// //       if (x > y) { return -1; }
+// //       return 0;
+// //     }
+// //   ).map(
+// //     v => {
+// //       return <TableRow row={v} />;
+// //     }
+// //   )
+// // }
 
-function SortStatusAscFunction() {
-  const expensesCopy = expenses;
-  return expensesCopy.sort(
-    (a, b) => {
-      let x = a.status.toLowerCase();
-      let y = b.status.toLowerCase();
-      if (x < y) { return -1; }
-      if (x > y) { return 1; }
-      return 0;
-    }
-  ).map(
-    v => {
-      return <TableRow row={v} />;
-    }
-  )
-}
+// // function SortStatusAscFunction({ expenses }) {
+// //   const expensesCopy = expenses;
+// //   return expensesCopy.sort(
+// //     (a, b) => {
+// //       let x = a.status.toLowerCase();
+// //       let y = b.status.toLowerCase();
+// //       if (x < y) { return -1; }
+// //       if (x > y) { return 1; }
+// //       return 0;
+// //     }
+// //   ).map(
+// //     v => {
+// //       return <TableRow row={v} />;
+// //     }
+// //   )
+// // }
 
-function SortCommentDescFunction() {
-  const expensesCopy = expenses;
-  return expensesCopy.sort(
-    (a, b) => {
-      let x = a.comment.toLowerCase();
-      let y = b.comment.toLowerCase();
-      if (x < y) { return 1; }
-      if (x > y) { return -1; }
-      return 0;
-    }
-  ).map(
-    v => {
-      return <TableRow row={v} />;
-    }
-  )
-}
+// // function SortCommentDescFunction({ expenses }) {
+// //   const expensesCopy = expenses;
+// //   return expensesCopy.sort(
+// //     (a, b) => {
+// //       let x = a.comment.toLowerCase();
+// //       let y = b.comment.toLowerCase();
+// //       if (x < y) { return 1; }
+// //       if (x > y) { return -1; }
+// //       return 0;
+// //     }
+// //   ).map(
+// //     v => {
+// //       return <TableRow row={v} />;
+// //     }
+// //   )
+// // }
 
-function SortCommentAscFunction() {
-  const expensesCopy = expenses;
-  return expensesCopy.sort(
-    (a, b) => {
-      let x = a.comment.toLowerCase();
-      let y = b.comment.toLowerCase();
-      if (x < y) { return -1; }
-      if (x > y) { return 1; }
-      return 0;
-    }
-  ).map(
-    v => {
-      return <TableRow row={v} />;
-    }
-  )
-}
+// // function SortCommentAscFunction({ expenses }) {
+// //   const expensesCopy = expenses;
+// //   return expensesCopy.sort(
+// //     (a, b) => {
+// //       let x = a.comment.toLowerCase();
+// //       let y = b.comment.toLowerCase();
+// //       if (x < y) { return -1; }
+// //       if (x > y) { return 1; }
+// //       return 0;
+// //     }
+// //   ).map(
+// //     v => {
+// //       return <TableRow row={v} />;
+// //     }
+// //   )
+// // }
+
+// function ExpensesTable({ data }) {
+//   const [dateSort, setDateSort] = useState(0);
+
+
+//   const [tableSort, setTableSort] = useState(() => <SortDateDescFunction expenses={data} />);
+
+//   const [merchantSort, setMerchantSort] = useState(3);
+
+//   const [totalSort, setTotalSort] = useState(6);
+
+//   const [statusSort, setStatusSort] = useState(9);
+
+//   const [commentSort, setCommentSort] = useState(12);
+
+//   // setTableSort(data);
+
+//   const sortDate = () => {
+//     setMerchantSort(3);
+//     setTotalSort(6);
+//     setStatusSort(9);
+//     setCommentSort(12);
+
+//     dateSort === 0 ? setDateSort(1)
+//       : dateSort === 1 ? setDateSort(2)
+//         : setDateSort(0);
+
+//     dateSort === 0 ? setTableSort(() => <SortDateDescFunction expenses={data} />)
+//       : dateSort === 1 ? setTableSort(() => <DontSortTableFunction expenses={data} />)
+//         : setTableSort(() => <SortDateAscFunction expenses={data} />)
+
+//   }
+
+//   const sortMerchant = () => {
+//     setDateSort(2);
+//     setTotalSort(6);
+//     setStatusSort(9);
+//     setCommentSort(12);
+
+//     merchantSort === 3 ? setMerchantSort(4)
+//       : merchantSort === 4 ? setMerchantSort(5)
+//         : setMerchantSort(3);
+
+//     merchantSort === 3 ? setTableSort(() => <SortMerchantAscFunction />)
+//       : merchantSort === 4 ? setTableSort(() => <SortMerchantDescFunction />)
+//         : setTableSort(() => <DontSortTableFunction />)
+
+//   }
+
+//   const sortTotal = () => {
+//     setDateSort(2);
+//     setMerchantSort(3);
+//     setStatusSort(9);
+//     setCommentSort(12);
+
+//     totalSort === 6 ? setTotalSort(7)
+//       : totalSort === 7 ? setTotalSort(8)
+//         : setTotalSort(6);
+
+//     totalSort === 6 ? setTableSort(() => <SortTotalAscFunction expenses={data} />)
+//       : totalSort === 7 ? setTableSort(() => <SortTotalDescFunction expenses={data} />)
+//         : setTableSort(() => <DontSortTableFunction expenses={data} />)
+
+//   }
+
+//   const sortStatus = () => {
+//     setDateSort(2);
+//     setMerchantSort(3);
+//     setTotalSort(6);
+//     setCommentSort(12);
+
+//     statusSort === 9 ? setStatusSort(10)
+//       : statusSort === 10 ? setStatusSort(11)
+//         : setStatusSort(9);
+
+//     statusSort === 9 ? setTableSort(() => <SortStatusAscFunction />)
+//       : statusSort === 10 ? setTableSort(() => <SortStatusDescFunction />)
+//         : setTableSort(() => <DontSortTableFunction />)
+
+//   }
+
+//   const sortComment = () => {
+//     setDateSort(2);
+//     setMerchantSort(3);
+//     setTotalSort(6);
+//     setStatusSort(9);
+
+//     commentSort === 12 ? setCommentSort(13)
+//       : commentSort === 13 ? setCommentSort(14)
+//         : setCommentSort(12);
+
+//     commentSort === 12 ? setTableSort(() => <SortCommentAscFunction />)
+//       : commentSort === 13 ? setTableSort(() => <SortCommentDescFunction />)
+//         : setTableSort(() => <DontSortTableFunction />)
+
+//   }
+
+
+
+//   return (
+//     <table className='table'>
+//       <thead>
+//         <tr>
+//           <th onClick={sortDate}>
+//             {dateSort === 1 ? <DateSortDescIcon />
+//               : dateSort === 0 ? <DateSortAscIcon />
+//                 : <DateSortUpDownIcon />}
+//           </th>
+//           <th onClick={sortMerchant}>
+//             {merchantSort === 5 ? <MerchantSortDescIcon />
+//               : merchantSort === 4 ? <MerchantSortAscIcon />
+//                 : <MerchantSortUpDownIcon />}
+//           </th>
+//           <th onClick={sortTotal}>
+//             {totalSort === 8 ? <TotalSortDescIcon />
+//               : totalSort === 7 ? <TotalSortAscIcon />
+//                 : <TotalSortUpDownIcon />}
+//           </th>
+//           <th onClick={sortStatus}>
+//             {statusSort === 11 ? <StatusSortDescIcon />
+//               : statusSort === 10 ? <StatusSortAscIcon />
+//                 : <StatusSortUpDownIcon />}
+//           </th>
+//           <th onClick={sortComment}>
+//             {commentSort === 14 ? <CommentSortDescIcon />
+//               : commentSort === 13 ? <CommentSortAscIcon />
+//                 : <CommentSortUpDownIcon />}
+//           </th>
+//         </tr>
+//       </thead>
+//       <tbody>
+//         {/* {tableSort} */}
+//         <tr>
+//           <td>{data.createdAt}</td>
+//           <td>{data.merchant}</td>
+//           <td>{data.total}</td>
+//           <td>{data.status}</td>
+//           <td>{data.comment}</td>
+//         </tr>
+//       </tbody>
+//     </table>
+//   );
+// }
 
 function ExpensesForm() {
-  const [fromDate, setFromDate] = useState(null);
-  const [toDate, setToDate] = useState(null);
-  const [min, setMin] = useState(null);
-  const [max, setMax] = useState(null);
-  const [merchant, setMerchant] = useState(null);
-  const [status, setStatus] = useState(null);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [min, setMin] = useState("");
+  const [max, setMax] = useState("");
+  const [merchant, setMerchant] = useState("");
+  // const [status, setStatus] = useState(null);
 
-  return (
-    <form>
-      <div className='mt-3'>
-        <div className="small d-flex justify-content-between">
-          <span>Filter Expenses</span>
-          <a className="text-primary text-decoration-none">Clear Filters</a>
-          {/* <button type="button" className="btn text-primary">Clear Filters</button> */}
-        </div>
-        
-        <hr />
-      </div>
-      <div>
-        <label for='from' className='form-label mt-3'>From</label>
-        <input type="date" id='from' value={fromDate} className='form-control' />
-      </div>
-      <div>
-        <label for='to' className='form-label mt-3'>To</label>
-        <input type="date" id='to' value={toDate} className='form-control' />
-      </div>
-      <div className='row'>
-        <div className='col-5'>
-          <label for='min' className='form-label mt-3'>Min</label>
-          <input type="number" id='min' value={min} className='form-control' />
-        </div>
-        <div className='col-1'>
-          <label className='form-label mt-3'></label>
-          <input type="text" value='-' className='form-control-plaintext mt-3' disabled />
-        </div>
-        <div className='col-5'>
-          <label for='max' className='form-label mt-3'>Max</label>
-          <input type="number" id='max' value={max} className='form-control' />
-        </div>
-      </div>
-      <div>
-        <label for='merchant' className='form-label mt-3'>Merchant</label>
-        <select id='merchant' value={merchant} className='form-select'>
-          <option value='shuttle'>Shuttle</option>
-          <option value='fast food'>Fast food</option>
-          <option value='electronics'>Electronics</option>
-          <option value='restaurant'>Restaurant</option>
-          <option value="breakfast">Breakfast</option>
-          <option value="parking">Parking</option>
-          <option value="office supplies">Office supplies</option>
-          <option value="rental car">Rental car</option>
-          <option value="hotel">Hotel</option>
-          <option value="taxi">Taxi</option>
-          <option value="ride sharing">Ride sharing</option>
-          <option value="airline">Airline</option>
-        </select>
-      </div>
-      <div>
-        <label for='' className='form-check-label mt-3'>Status</label>
-        <div className="form-check">
-          <input type="checkbox" value='new' className="form-check-input" checked/>
-          <label className='form-check-label'>New</label>
-        </div>
-        <div className="form-check">
-          <input type="checkbox" value='in progress' className="form-check-input" checked />
-          <label className='form-check-label'>In Progress</label>
-        </div>
-        <div className="form-check">
-          <input type="checkbox" value='reimbursed' className="form-check-input" checked />
-          <label className='form-check-label'>Reimbursed</label>
-        </div>
-        
-        
-      </div>
-    </form>
+  const [expenses, setExpenses] = useState(() => employeeExpenses.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
 
-  );
-}
+  const [dateSort, setDateSort] = useState(1);
 
-function ExpensesTable({ data }) {
-  const [dateSort, setDateSort] = useState(0);
-  
 
-  const [tableSort, setTableSort] = useState(() => <SortDateDescFunction />); 
+ // const [tableSort, setTableSort] = useState(() => <SortDateDescFunction expenses={expenses} />);
 
   const [merchantSort, setMerchantSort] = useState(3);
 
@@ -387,20 +459,113 @@ function ExpensesTable({ data }) {
 
   const [commentSort, setCommentSort] = useState(12);
 
+  const handleFromDate = (e) => {
+    setFromDate(e.target.value);
+    // hard coded values... To be changed to dynamic later
+    const value = e.target.value === "" ? "2023-03-02" : e.target.value;
+    // const tempDate = toDate;
+    const lastDate = toDate === "" ? "2023-03-09" : toDate;
+    const latestMin = min === "" ? 10.89 : min;
+    const latestMax = max === "" ? 809.37 : max;
+    
+    setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value)
+      && new Date(a.createdAt) <= new Date(lastDate) &&
+      a.total >= latestMin &&
+      a.total <= latestMax));
+    
+    //const expenses = employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value));
+
+    
+  }
+
+  const handleToDate = (e) => {
+    // hard coded values... To be changed to dynamic later
+    setToDate(e.target.value);
+    const value = e.target.value === "" ? "2023-03-09" : e.target.value;
+
+    // const tempDate = fromDate;
+    const firstDate = fromDate === "" ? "2023-03-02" : fromDate;
+    const latestMin = min === "" ? 10.89 : min;
+    const latestMax = max === "" ? 809.37 : max;
+
+    setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+      new Date(a.createdAt) <= new Date(value) &&
+      a.total >= latestMin &&
+      a.total <= latestMax));
+    
+  }
+
+  const handleMin = (e) => {
+    setMin(e.target.value);
+    // hard coded values... To be changed to dynamic later
+    const value = e.target.value === null ? 10.89 : e.target.value;
+
+    const firstDate = fromDate === "" ? "2023-03-02" : fromDate;
+    const lastDate = toDate === "" ? "2023-03-09" : toDate;
+    const latestMax = max === "" ? 809.37 : max;
+
+    setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+      new Date(a.createdAt) <= new Date(lastDate) &&
+      a.total >= value &&
+      a.total <= latestMax));
+    // const expenses = employeeExpenses.filter((a) => a.total >= value);
+
+    
+  }
+
+  const handleMax = (e) => {
+    setMax(e.target.value);
+    // hard coded values... To be changed to dynamic later
+    const value = e.target.value === null ? 809.37 : e.target.value;
+
+    const firstDate = fromDate === "" ? "2023-03-02" : fromDate;
+    const lastDate = toDate === "" ? "2023-03-09" : toDate;
+    const latestMin = min === "" ? 10.89 : min;
+
+    setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+      new Date(a.createdAt) <= new Date(lastDate) &&
+      a.total >= latestMin &&
+      a.total <= value));
+    // const expenses = employeeExpenses.filter((a) => a.total <= value);
+  }
+
+  const handleMerchant = (e) => {
+    setMerchant(e.target.value);
+    // hard coded value... To be changed to dynamic later
+    // const value = e.target.value === null ? 809.37 : e.target.value;
+    setExpenses(() => employeeExpenses.filter((a) => a.merchant === e.target.value))
+    // const expenses = employeeExpenses.filter((a) => a.merchant = e.target.value);
+
+    
+  }
+
+  const clearFilters = () => {
+    setFromDate("");
+    setToDate("");
+    setMin("");
+    setMax("");
+  }
+
   const sortDate = () => {
     setMerchantSort(3);
     setTotalSort(6);
     setStatusSort(9);
     setCommentSort(12);
-    
+
     dateSort === 0 ? setDateSort(1)
       : dateSort === 1 ? setDateSort(2)
         : setDateSort(0);
-    
-    dateSort === 0 ? setTableSort(() => <SortDateDescFunction />)
-      : dateSort === 1 ? setTableSort(() => <DontSortTableFunction />)
-        : setTableSort(() => <SortDateAscFunction />)
-               
+
+    dateSort === 0 ? setExpenses(() => expenses.sort(
+    // sort descending
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    ))
+      : dateSort === 1 ? setExpenses(() => expenses)
+        : setExpenses(() => expenses.sort(
+        // sort ascending
+          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+        ))
+
   }
 
   const sortMerchant = () => {
@@ -413,9 +578,27 @@ function ExpensesTable({ data }) {
       : merchantSort === 4 ? setMerchantSort(5)
         : setMerchantSort(3);
 
-    merchantSort === 3 ? setTableSort(() => <SortMerchantAscFunction />)
-      : merchantSort === 4 ? setTableSort(() => <SortMerchantDescFunction />)
-        : setTableSort(() => <DontSortTableFunction />)
+    merchantSort === 3 ? setExpenses(() => expenses.sort( 
+      // sort ascending
+      (a, b) => {
+        let x = a.merchant.toLowerCase();
+        let y = b.merchant.toLowerCase();
+        if (x < y) { return -1; }
+        if (x > y) { return 1; }
+        return 0;
+      }
+    ))
+      : merchantSort === 4 ? setExpenses(() => expenses.sort(
+        // sort descending
+        (a, b) => {
+          let x = a.merchant.toLowerCase();
+          let y = b.merchant.toLowerCase();
+          if (x < y) { return 1; }
+          if (x > y) { return -1; }
+          return 0;
+        }
+      )) 
+        : setExpenses(() => expenses)
 
   }
 
@@ -429,9 +612,15 @@ function ExpensesTable({ data }) {
       : totalSort === 7 ? setTotalSort(8)
         : setTotalSort(6);
 
-    totalSort === 6 ? setTableSort(() => <SortTotalAscFunction />)
-      : totalSort === 7 ? setTableSort(() => <SortTotalDescFunction />)
-        : setTableSort(() => <DontSortTableFunction />)
+    totalSort === 6 ? setExpenses(() => expenses.sort(
+    // sort ascending
+      (a, b) => a.total - b.total
+    ))
+      : totalSort === 7 ? setExpenses(() => expenses.sort(
+      // sort descending
+        (a, b) => b.total - a.total
+      ))
+        : setExpenses(() => expenses)
 
   }
 
@@ -445,9 +634,27 @@ function ExpensesTable({ data }) {
       : statusSort === 10 ? setStatusSort(11)
         : setStatusSort(9);
 
-    statusSort === 9 ? setTableSort(() => <SortStatusAscFunction />)
-      : statusSort === 10 ? setTableSort(() => <SortStatusDescFunction />)
-        : setTableSort(() => <DontSortTableFunction />)
+    statusSort === 9 ? setExpenses(() => expenses.sort(
+    // sort ascending
+      (a, b) => {
+        let x = a.status.toLowerCase();
+        let y = b.status.toLowerCase();
+        if (x < y) { return -1; }
+        if (x > y) { return 1; }
+        return 0;
+      }
+    ))
+      : statusSort === 10 ? setExpenses(() => expenses.sort(
+      // sort descending
+        (a, b) => {
+          let x = a.status.toLowerCase();
+          let y = b.status.toLowerCase();
+          if (x < y) { return 1; }
+          if (x > y) { return -1; }
+          return 0;
+        }
+      ))
+        : setExpenses(() => expenses)
 
   }
 
@@ -461,32 +668,102 @@ function ExpensesTable({ data }) {
       : commentSort === 13 ? setCommentSort(14)
         : setCommentSort(12);
 
-    commentSort === 12 ? setTableSort(() => <SortCommentAscFunction />)
-      : commentSort === 13 ? setTableSort(() => <SortCommentDescFunction />)
-        : setTableSort(() => <DontSortTableFunction />)
+    commentSort === 12 ? setExpenses(() => expenses.sort(
+    // sort ascending
+      (a, b) => {
+        let x = a.comment.toLowerCase();
+        let y = b.comment.toLowerCase();
+        if (x < y) { return -1; }
+        if (x > y) { return 1; }
+        return 0;
+      }
+    ))
+      : commentSort === 13 ? setExpenses(() => expenses.sort(
+      // sort descending
+        (a, b) => {
+          let x = a.comment.toLowerCase();
+          let y = b.comment.toLowerCase();
+          if (x < y) { return 1; }
+          if (x > y) { return -1; }
+          return 0;
+        }
+      ))
+        : setExpenses(() => expenses)
 
   }
-    
 
-  
   return (
-    <div>
-      <nav className="navbar bg-dark navbar-dark py-3">
-        <div className="container-fluid">
-          <span className="navbar-brand">Expense Manager</span>
-          <div>
-            <button type="button" className="btn btn-secondary text-primary me-3">INFO</button>
-            <button type="button" className="btn btn-secondary text-primary">LOGOUT</button>
-          </div>
+    <div className='container-fluid'>
+          <div className='row text-start'>
+            <div className='col-3'>
+              <form>
+                <div className='mt-3'>
+                  <div className="small d-flex justify-content-between">
+                    <span>Filter Expenses</span>
+                {/* <a href="#" onClick={clearFilters} className="text-primary text-decoration-none">Clear Filters</a> */}
+                <button type="button" onClick={clearFilters} className="text-primary">Clear Filters</button>
+                    {/* <button type="button" className="btn text-primary">Clear Filters</button> */}
+                  </div>
 
-        </div>
-        
+                  <hr />
+                </div>
+                <div>
+                  <label htmlFor='from' className='form-label mt-3'>From</label>
+                  <input type="date" id='from' value={fromDate} onChange={handleFromDate} className='form-control' />
+                </div>
+                <div>
+              <label htmlFor='to' className='form-label mt-3'>To</label>
+                  <input type="date" id='to' value={toDate} onChange={handleToDate} className='form-control' />
+                </div>
+                <div className='row'>
+                  <div className='col-5'>
+                <label htmlFor='min' className='form-label mt-3'>Min</label>
+                    <input type="number" id='min' value={min} onChange={handleMin} className='form-control' />
+                  </div>
+                  <div className='col-1'>
+                    <label className='form-label mt-3'></label>
+                    <input type="text" value='-' className='form-control-plaintext mt-3' disabled />
+                  </div>
+                  <div className='col-5'>
+                <label htmlFor='max' className='form-label mt-3'>Max</label>
+                    <input type="number" id='max' value={max} onChange={handleMax} className='form-control' />
+                  </div>
+                </div>
+                <div>
+              <label htmlFor='merchant' className='form-label mt-3'>Merchant</label>
+                  <select id='merchant' value={merchant} onChange={handleMerchant} className='form-select'>
+                    <option value='shuttle'>Shuttle</option>
+                    <option value='fast food'>Fast food</option>
+                    <option value='electronics'>Electronics</option>
+                    <option value='restaurant'>Restaurant</option>
+                    <option value="breakfast">Breakfast</option>
+                    <option value="parking">Parking</option>
+                    <option value="office supplies">Office supplies</option>
+                    <option value="rental car">Rental car</option>
+                    <option value="hotel">Hotel</option>
+                    <option value="taxi">Taxi</option>
+                    <option value="ride sharing">Ride sharing</option>
+                    <option value="airline">Airline</option>
+                  </select>
+                </div>
+                {/* <div>
+                  <label for='' className='form-check-label mt-3'>Status</label>
+                  <div className="form-check">
+                    <input type="checkbox" value='new' className="form-check-input" checked />
+                    <label className='form-check-label'>New</label>
+                  </div>
+                  <div className="form-check">
+                    <input type="checkbox" value='in progress' className="form-check-input" checked />
+                    <label className='form-check-label'>In Progress</label>
+                  </div>
+                  <div className="form-check">
+                    <input type="checkbox" value='reimbursed' className="form-check-input" checked />
+                    <label className='form-check-label'>Reimbursed</label>
+                  </div>
 
-      </nav>
-      <div className='container-fluid'>
-        <div className='row text-start'>
-          <div className='col-3'>
-            <ExpensesForm />
+
+                </div> */}
+              </form>
           </div>
           <div className='col-7'>
             <table className='table'>
@@ -520,38 +797,60 @@ function ExpensesTable({ data }) {
                 </tr>
               </thead>
               <tbody>
-                {tableSort}
+              {/* {tableSort} */}
+              {expenses.map((a) => {
+                return (
+                  <tr>
+                    <td>{a.createdAt}</td>
+                    <td>{a.merchant}</td>
+                    <td>{a.total}</td>
+                    <td>{a.status}</td>
+                    <td>{a.comment}</td>
+                  </tr>
+                );
+
+              })}
+                
               </tbody>
             </table>
+            
+            {/* <ExpensesTable data={expenses} /> */} 
           </div>
-          <div className='col-2'>
-
-            <div className='pt-2'>
-              <small>To be reimbursed</small>
-              <hr />
+            <div className='col-2'>
+              <div className='pt-2'>
+                <small>To be reimbursed</small>
+                <hr />
+              </div>
+              <div>
+                ${
+              employeeExpenses.filter(
+                    (a) => a.status === "New"
+                  ).reduce((x, y) => x + y.total, 0).toFixed(2)
+                }
+              </div>
             </div>
-            <div>
-              ${
-                expenses.filter(
-                  (a) => a.status === "New"
-                ).reduce((x, y) => x + y.total, 0).toFixed(2)
-              }
-            </div>
-
-
           </div>
-
         </div>
-      </div>
-    </div>
-    
   );
 }
 
 function App() {
   return (
     <div className="App">
-      <ExpensesTable data={expenses} />
+      <div>
+        <nav className="navbar bg-dark navbar-dark py-3">
+          <div className="container-fluid">
+            <span className="navbar-brand">Expense Manager</span>
+            <div>
+              <button type="button" className="btn btn-secondary text-primary me-3">INFO</button>
+              <button type="button" className="btn btn-secondary text-primary">LOGOUT</button>
+            </div>
+          </div>
+        </nav>
+
+        <ExpensesForm />
+      </div>
+      
     </div>
   );
 }
