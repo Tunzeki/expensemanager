@@ -701,7 +701,7 @@ function ExpensesForm() {
                   <div className="small d-flex justify-content-between">
                     <span>Filter Expenses</span>
                 {/* <a href="#" onClick={clearFilters} className="text-primary text-decoration-none">Clear Filters</a> */}
-                <button type="button" onClick={clearFilters} className="text-primary">Clear Filters</button>
+                <button type="button" onClick={clearFilters} className="text-primary btn-unstyled">Clear Filters</button>
                     {/* <button type="button" className="btn text-primary">Clear Filters</button> */}
                   </div>
 
