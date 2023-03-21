@@ -641,6 +641,7 @@ function ExpensesForm() {
     setMin("");
     setMax("");
     setMerchant("");
+    setExpenses(() => employeeExpenses)
   }
 
   const sortDate = () => {
