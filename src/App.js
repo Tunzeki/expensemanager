@@ -731,20 +731,21 @@ function ExpensesForm() {
                 </div>
                 <div>
               <label htmlFor='merchant' className='form-label mt-3'>Merchant</label>
-                  <select id='merchant' value={merchant} onChange={handleMerchant} className='form-select'>
-                    <option value='shuttle'>Shuttle</option>
-                    <option value='fast food'>Fast food</option>
-                    <option value='electronics'>Electronics</option>
-                    <option value='restaurant'>Restaurant</option>
-                    <option value="breakfast">Breakfast</option>
-                    <option value="parking">Parking</option>
-                    <option value="office supplies">Office supplies</option>
-                    <option value="rental car">Rental car</option>
-                    <option value="hotel">Hotel</option>
-                    <option value="taxi">Taxi</option>
-                    <option value="ride sharing">Ride sharing</option>
-                    <option value="airline">Airline</option>
-                  </select>
+              <input list="merchants" id="merchant" className="form-control" />
+                  <datalist id='merchants' value={merchant} onChange={handleMerchant}>
+                    <option value='Shuttle' />
+                    <option value='Fast food' />
+                    <option value='Electronics' />
+                    <option value='Restaurant' />
+                    <option value="Breakfast" />
+                    <option value="Parking" />
+                    <option value="Office supplies" />
+                    <option value="Rental car" />
+                    <option value="Hotel" />
+                    <option value="Taxi" />
+                    <option value="Ride sharing" />
+                    <option value="Airline" />
+                  </datalist>
                 </div>
                 {/* <div>
                   <label for='' className='form-check-label mt-3'>Status</label>
