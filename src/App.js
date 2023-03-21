@@ -467,15 +467,27 @@ function ExpensesForm() {
     const lastDate = toDate === "" ? "2023-03-09" : toDate;
     const latestMin = min === "" ? 10.89 : min;
     const latestMax = max === "" ? 809.37 : max;
-    
-    setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value)
-      && new Date(a.createdAt) <= new Date(lastDate) &&
-      a.total >= latestMin &&
-      a.total <= latestMax));
-    
-    //const expenses = employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value));
+    let latestMerchant = "";
 
+    const merchantArray = ["Shuttle", "Fast food", "Electronics", "Restaurant", "Breakfast",
+      "Parking", "Office supplies", "Rental car", "Hotel", "Taxi", "Ride sharing", "Airline"];
+    const isValidMerchant = (x) => x === merchant;   
     
+    if (merchantArray.some(isValidMerchant)) {
+      latestMerchant = merchant;
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant));
+    } else {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== latestMerchant));
+    }
+      
   }
 
   const handleToDate = (e) => {
@@ -483,15 +495,29 @@ function ExpensesForm() {
     setToDate(e.target.value);
     const value = e.target.value === "" ? "2023-03-09" : e.target.value;
 
-    // const tempDate = fromDate;
     const firstDate = fromDate === "" ? "2023-03-02" : fromDate;
     const latestMin = min === "" ? 10.89 : min;
     const latestMax = max === "" ? 809.37 : max;
+    let latestMerchant = "";
 
-    setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-      new Date(a.createdAt) <= new Date(value) &&
-      a.total >= latestMin &&
-      a.total <= latestMax));
+    const merchantArray = ["Shuttle", "Fast food", "Electronics", "Restaurant", "Breakfast",
+      "Parking", "Office supplies", "Rental car", "Hotel", "Taxi", "Ride sharing", "Airline"];
+    const isValidMerchant = (x) => x === merchant;
+
+    if (merchantArray.some(isValidMerchant)) {
+      latestMerchant = merchant;
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(value) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant));
+    } else {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(value) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== latestMerchant));
+    }
     
   }
 
@@ -503,14 +529,27 @@ function ExpensesForm() {
     const firstDate = fromDate === "" ? "2023-03-02" : fromDate;
     const lastDate = toDate === "" ? "2023-03-09" : toDate;
     const latestMax = max === "" ? 809.37 : max;
+    let latestMerchant = "";
 
-    setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-      new Date(a.createdAt) <= new Date(lastDate) &&
-      a.total >= value &&
-      a.total <= latestMax));
-    // const expenses = employeeExpenses.filter((a) => a.total >= value);
+    const merchantArray = ["Shuttle", "Fast food", "Electronics", "Restaurant", "Breakfast",
+      "Parking", "Office supplies", "Rental car", "Hotel", "Taxi", "Ride sharing", "Airline"];
+    const isValidMerchant = (x) => x === merchant;
 
-    
+    if (merchantArray.some(isValidMerchant)) {
+      latestMerchant = merchant;
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= value &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant));
+    } else {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= value &&
+        a.total <= latestMax &&
+        a.merchant !== latestMerchant));
+    }
+
   }
 
   const handleMax = (e) => {
@@ -521,12 +560,27 @@ function ExpensesForm() {
     const firstDate = fromDate === "" ? "2023-03-02" : fromDate;
     const lastDate = toDate === "" ? "2023-03-09" : toDate;
     const latestMin = min === "" ? 10.89 : min;
+    let latestMerchant = "";
 
-    setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-      new Date(a.createdAt) <= new Date(lastDate) &&
-      a.total >= latestMin &&
-      a.total <= value));
-    // const expenses = employeeExpenses.filter((a) => a.total <= value);
+    const merchantArray = ["Shuttle", "Fast food", "Electronics", "Restaurant", "Breakfast",
+      "Parking", "Office supplies", "Rental car", "Hotel", "Taxi", "Ride sharing", "Airline"];
+    const isValidMerchant = (x) => x === merchant;
+
+    if (merchantArray.some(isValidMerchant)) {
+      latestMerchant = merchant;
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= value &&
+        a.merchant === latestMerchant));
+    } else {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= value &&
+        a.merchant !== latestMerchant));
+    }
+
   }
 
   const selectMerchant = (e) => {
