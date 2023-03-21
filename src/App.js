@@ -529,15 +529,57 @@ function ExpensesForm() {
     // const expenses = employeeExpenses.filter((a) => a.total <= value);
   }
 
+  const selectMerchant = (e) => {
+    // This updates the table immediately a valid option is selected on the screen
+    const firstDate = fromDate === "" ? "2023-03-02" : fromDate;
+    const lastDate = toDate === "" ? "2023-03-09" : toDate;
+    const latestMin = min === "" ? 10.89 : min;
+    const latestMax = max === "" ? 809.37 : max;
+
+    const merchantArray = ["Shuttle", "Fast food", "Electronics", "Restaurant", "Breakfast",
+      "Parking", "Office supplies", "Rental car", "Hotel", "Taxi", "Ride sharing", "Airline"];
+    const isValidMerchant = (x) => x === e.target.value;
+    if (merchantArray.some(isValidMerchant)) {
+      // merchant already updated with onChange event handler, hence no need to call setMerchant
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === e.target.value));
+    }
+  }
+
   const handleMerchant = (e) => {
-    setMerchant(e.target.value);
+    
     // hard coded value... To be changed to dynamic later
     // const value = e.target.value === null ? 809.37 : e.target.value;
-    setExpenses(() => employeeExpenses.filter((a) => a.merchant === e.target.value))
-    // const expenses = employeeExpenses.filter((a) => a.merchant = e.target.value);
+    const firstDate = fromDate === "" ? "2023-03-02" : fromDate;
+    const lastDate = toDate === "" ? "2023-03-09" : toDate;
+    const latestMin = min === "" ? 10.89 : min;
+    const latestMax = max === "" ? 809.37 : max;
 
-    
+    const merchantArray = ["Shuttle", "Fast food", "Electronics", "Restaurant", "Breakfast",
+      "Parking", "Office supplies", "Rental car", "Hotel", "Taxi", "Ride sharing", "Airline"];
+    const isValidMerchant = (x) => x === e.target.value;
+    if (merchantArray.some(isValidMerchant)) {
+      setMerchant(e.target.value);
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === e.target.value));
+    } else {
+      setMerchant("");
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== ""));
+    }
+
   }
+ 
+
 
   const clearFilters = () => {
     setFromDate("");
@@ -731,8 +773,8 @@ function ExpensesForm() {
                 </div>
                 <div>
               <label htmlFor='merchant' className='form-label mt-3'>Merchant</label>
-              <input list="merchants" id="merchant" className="form-control" />
-                  <datalist id='merchants' value={merchant} onChange={handleMerchant}>
+              <input list="merchants" id="merchant" value={merchant} onChange={(e) => setMerchant(e.target.value)} onSelect={selectMerchant} onBlur={handleMerchant} className="form-control" />
+                  <datalist id='merchants'>
                     <option value='Shuttle' />
                     <option value='Fast food' />
                     <option value='Electronics' />
