@@ -640,6 +640,7 @@ function ExpensesForm() {
     setToDate("");
     setMin("");
     setMax("");
+    setMerchant("");
   }
 
   const sortDate = () => {
