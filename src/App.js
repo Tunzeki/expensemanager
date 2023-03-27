@@ -442,7 +442,9 @@ function ExpensesForm() {
   const [min, setMin] = useState("");
   const [max, setMax] = useState("");
   const [merchant, setMerchant] = useState("");
-  // const [status, setStatus] = useState(null);
+  const [newStatus, setNewStatus] = useState(true);
+  const [inProgressStatus, setInProgressStatus] = useState(true);
+  const [reimbursedStatus, setReimbursedStatus] = useState(true);
 
   const [expenses, setExpenses] = useState(() => employeeExpenses.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
 
@@ -633,7 +635,145 @@ function ExpensesForm() {
 
   }
  
+  const handleNewStatus = (e) => {
+    setNewStatus(e.target.checked);
+    // hard coded values... To be changed to dynamic later
+    const checked = e.target.checked === true ? "New" : false;
 
+    const firstDate = fromDate === "" ? "2023-03-02" : fromDate;
+    const lastDate = toDate === "" ? "2023-03-09" : toDate;
+    const latestMin = min === "" ? 10.89 : min;
+    const latestMax = max === "" ? 809.37 : max;
+    const latestMerchant = merchant;
+    const latestInProgressStatus = inProgressStatus === true ? "In Progress" : false;
+    const latestReimbursedStatus = reimbursedStatus === true ? "Reimbursed" : false;
+
+    const merchantArray = ["Shuttle", "Fast food", "Electronics", "Restaurant", "Breakfast",
+      "Parking", "Office supplies", "Rental car", "Hotel", "Taxi", "Ride sharing", "Airline"];
+    const isValidMerchant = (x) => x === merchant;
+
+    if (merchantArray.some(isValidMerchant) && e.target.checked && inProgressStatus && reimbursedStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant && 
+        (a.status === checked || a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
+    } else if (merchantArray.some(isValidMerchant) && e.target.checked && inProgressStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant &&
+        (a.status === checked || a.status === latestInProgressStatus)));
+    } else if (merchantArray.some(isValidMerchant) && e.target.checked && reimbursedStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant &&
+        (a.status === checked || a.status === latestReimbursedStatus)));
+    } else if (e.target.checked && inProgressStatus && reimbursedStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== "" &&
+        (a.status === checked || a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
+    } else if (merchantArray.some(isValidMerchant) && e.target.checked) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant &&
+        (a.status === checked)));
+    } else if (e.target.checked && inProgressStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== "" &&
+        (a.status === checked || a.status === latestInProgressStatus)));
+    } else if (e.target.checked && reimbursedStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== "" &&
+        (a.status === checked || a.status === latestInProgressStatus)));
+    } else if (e.target.checked) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== "" &&
+        (a.status === checked)));
+    } else if (merchantArray.some(isValidMerchant) && !e.target.checked && inProgressStatus && reimbursedStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant && 
+        (a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
+    } else if (merchantArray.some(isValidMerchant) && !e.target.checked && inProgressStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant &&
+        (a.status === latestInProgressStatus)));
+    } else if (merchantArray.some(isValidMerchant) && !e.target.checked && reimbursedStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant &&
+        (a.status === latestReimbursedStatus)));
+    } else if (!e.target.checked && inProgressStatus && reimbursedStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== "" &&
+        (a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
+    } else if (merchantArray.some(isValidMerchant) && !e.target.checked) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant));
+    } else if (!e.target.checked && inProgressStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== "" &&
+        (a.status === latestInProgressStatus)));
+    } else if (!e.target.checked && reimbursedStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== "" &&
+        (a.status === latestInProgressStatus)));
+    } else {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== "" &&
+        a.status === ""));
+    }
+
+  }
+
+  const handleInProgressStatus = (e) => {
+    setInProgressStatus(e.target.checked);
+  }
+
+  const handleReimbursedStatus = (e) => {
+    setReimbursedStatus(e.target.checked);
+  }
 
   const clearFilters = () => {
     setFromDate("");
@@ -799,7 +939,7 @@ function ExpensesForm() {
                   <div className="small d-flex justify-content-between">
                     <span>Filter Expenses</span>
                 {/* <a href="#" onClick={clearFilters} className="text-primary text-decoration-none">Clear Filters</a> */}
-                <button type="button" onClick={clearFilters} className="text-primary btn-unstyled">Clear Filters</button>
+                    <button type="button" onClick={clearFilters} className="text-primary btn-unstyled">Clear Filters</button>
                     {/* <button type="button" className="btn text-primary">Clear Filters</button> */}
                   </div>
 
@@ -810,12 +950,12 @@ function ExpensesForm() {
                   <input type="date" id='from' value={fromDate} onChange={handleFromDate} className='form-control' />
                 </div>
                 <div>
-              <label htmlFor='to' className='form-label mt-3'>To</label>
+                  <label htmlFor='to' className='form-label mt-3'>To</label>
                   <input type="date" id='to' value={toDate} onChange={handleToDate} className='form-control' />
                 </div>
                 <div className='row'>
                   <div className='col-5'>
-                <label htmlFor='min' className='form-label mt-3'>Min</label>
+                    <label htmlFor='min' className='form-label mt-3'>Min</label>
                     <input type="number" id='min' value={min} onChange={handleMin} className='form-control' />
                   </div>
                   <div className='col-1'>
@@ -844,7 +984,28 @@ function ExpensesForm() {
                     <option value="Ride sharing" />
                     <option value="Airline" />
                   </datalist>
+            </div>
+            <div className="mt-3">
+              Status
+              <div className="row mb-2">
+                <div className="col-3">
+                  <label>
+                    <input type="checkbox" checked={newStatus} onChange={handleNewStatus} className="form-check-input" /> New
+                  </label>
                 </div>
+                <div className="col-5">
+                    <label>
+                    <input type="checkbox" checked={inProgressStatus} onChange={handleInProgressStatus} className="form-check-input" /> In Progress
+                    </label>
+                  </div>
+              </div>
+              <div>
+                <label>
+                  <input type="checkbox" checked={reimbursedStatus} onChange={handleReimbursedStatus} className="form-check-input" /> Reimbursed
+                </label>
+              </div>
+              
+            </div>
                 {/* <div>
                   <label for='' className='form-check-label mt-3'>Status</label>
                   <div className="form-check">
