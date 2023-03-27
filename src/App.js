@@ -390,7 +390,7 @@ function ExpensesForm() {
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
-        (a.status === checked || a.status === latestInProgressStatus)));
+        (a.status === checked || a.status === latestReimbursedStatus)));
     } else if (e.target.checked) {
       setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
         new Date(a.createdAt) <= new Date(lastDate) &&
@@ -521,7 +521,7 @@ function ExpensesForm() {
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
-        (a.status === checked || a.status === latestNewStatus)));
+        (a.status === checked || a.status === latestReimbursedStatus)));
     } else if (e.target.checked) {
       setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
         new Date(a.createdAt) <= new Date(lastDate) &&
