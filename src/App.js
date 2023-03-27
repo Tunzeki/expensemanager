@@ -445,7 +445,7 @@ function ExpensesForm() {
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
-        (a.status === latestInProgressStatus)));
+        (a.status === latestReimbursedStatus)));
     } else {
       setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
         new Date(a.createdAt) <= new Date(lastDate) &&
@@ -459,6 +459,132 @@ function ExpensesForm() {
 
   const handleInProgressStatus = (e) => {
     setInProgressStatus(e.target.checked);
+    const checked = e.target.checked === true ? "In Progress" : false;
+
+    const firstDate = fromDate === "" ? "2023-03-02" : fromDate;
+    const lastDate = toDate === "" ? "2023-03-09" : toDate;
+    const latestMin = min === "" ? 10.89 : min;
+    const latestMax = max === "" ? 809.37 : max;
+    const latestMerchant = merchant;
+    const latestNewStatus = newStatus === true ? "New" : false;
+    const latestReimbursedStatus = reimbursedStatus === true ? "Reimbursed" : false;
+
+    const merchantArray = ["Shuttle", "Fast food", "Electronics", "Restaurant", "Breakfast",
+      "Parking", "Office supplies", "Rental car", "Hotel", "Taxi", "Ride sharing", "Airline"];
+    const isValidMerchant = (x) => x === merchant;
+
+    if (merchantArray.some(isValidMerchant) && e.target.checked && newStatus && reimbursedStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant &&
+        (a.status === checked || a.status === latestNewStatus || a.status === latestReimbursedStatus)));
+    } else if (merchantArray.some(isValidMerchant) && e.target.checked && newStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant &&
+        (a.status === checked || a.status === latestNewStatus)));
+    } else if (merchantArray.some(isValidMerchant) && e.target.checked && reimbursedStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant &&
+        (a.status === checked || a.status === latestReimbursedStatus)));
+    } else if (e.target.checked && newStatus && reimbursedStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== "" &&
+        (a.status === checked || a.status === latestNewStatus || a.status === latestReimbursedStatus)));
+    } else if (merchantArray.some(isValidMerchant) && e.target.checked) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant &&
+        (a.status === checked)));
+    } else if (e.target.checked && newStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== "" &&
+        (a.status === checked || a.status === latestNewStatus)));
+    } else if (e.target.checked && reimbursedStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== "" &&
+        (a.status === checked || a.status === latestNewStatus)));
+    } else if (e.target.checked) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== "" &&
+        (a.status === checked)));
+    } else if (merchantArray.some(isValidMerchant) && !e.target.checked && newStatus && reimbursedStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant &&
+        (a.status === latestNewStatus || a.status === latestReimbursedStatus)));
+    } else if (merchantArray.some(isValidMerchant) && !e.target.checked && newStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant &&
+        (a.status === latestNewStatus)));
+    } else if (merchantArray.some(isValidMerchant) && !e.target.checked && reimbursedStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant &&
+        (a.status === latestReimbursedStatus)));
+    } else if (!e.target.checked && newStatus && reimbursedStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== "" &&
+        (a.status === latestNewStatus || a.status === latestReimbursedStatus)));
+    } else if (merchantArray.some(isValidMerchant) && !e.target.checked) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant === latestMerchant));
+    } else if (!e.target.checked && newStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== "" &&
+        (a.status === latestNewStatus)));
+    } else if (!e.target.checked && reimbursedStatus) {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== "" &&
+        (a.status === latestReimbursedStatus)));
+    } else {
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
+        new Date(a.createdAt) <= new Date(lastDate) &&
+        a.total >= latestMin &&
+        a.total <= latestMax &&
+        a.merchant !== "" &&
+        a.status === ""));
+    }
   }
 
   const handleReimbursedStatus = (e) => {
