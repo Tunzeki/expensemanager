@@ -468,7 +468,7 @@ function ExpensesForm() {
   const handleMin = (e) => {
     setMin(e.target.value);
     // hard coded values... To be changed to dynamic later
-    const value = e.target.value === null ? 10.89 : e.target.value;
+    const value = e.target.value === "" ? 10.89 : e.target.value;
 
     const firstDate = fromDate === "" ? "2023-03-02" : fromDate;
     const lastDate = toDate === "" ? "2023-03-09" : toDate;
