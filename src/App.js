@@ -1576,20 +1576,20 @@ function ExpensesForm() {
           </div>
             
             {/* <ExpensesTable data={expenses} /> */} 
+        </div>
+        <div className='col-2'>
+          <div className='pt-2'>
+            <small>To be reimbursed</small>
+            <hr />
           </div>
-            <div className='col-2'>
-              <div className='pt-2'>
-                <small>To be reimbursed</small>
-                <hr />
-              </div>
-              <div className="h2 m-5">
+          <div className="h2 py-5 text-center">
                 ${
               employeeExpenses.filter(
                     (a) => a.status === "New"
                   ).reduce((x, y) => x + y.total, 0).toFixed(2)
                 }
-              </div>
-            </div>
+          </div>
+        </div>
           </div>
         </div>
   );
