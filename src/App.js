@@ -600,7 +600,7 @@ function ExpensesForm() {
   const handleMax = (e) => {
     setMax(e.target.value);
     // hard coded values... To be changed to dynamic later
-    const value = e.target.value === null ? 809.37 : e.target.value;
+    const value = e.target.value === "" ? 809.37 : e.target.value;
 
     const firstDate = fromDate === "" ? "2023-03-02" : fromDate;
     const lastDate = toDate === "" ? "2023-03-09" : toDate;
