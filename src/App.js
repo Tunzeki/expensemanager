@@ -152,7 +152,7 @@ function ExpensesForm() {
 
   // Declare state variable for the expenses data obtained from ExpensesList.js
   // The initializer function sorts this data by Date in descending order
-  const [expenses, setExpenses] = useState(() => employeeExpenses.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+  const [expenses, setExpenses] = useState(() => employeeExpenses.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt).getTime()));
 
   // Declare state variables to store the state of the <th> elements JSX in the Table on the page
   // These variables change in response to onClick events that occur when the text 
@@ -197,113 +197,134 @@ function ExpensesForm() {
     // The logic for calling setExpenses varies with the values of these variables,
     // hence, these conditions exist to ensure that the correct logic is used 
     // for all their possible values
+    
+    /**
+     * Dates in the ExpensesList.js file are stored in the format MM/DD/YYYY
+     * Calling new Date('MM/DD/YYYY') returns a date with the HH:MM:SS set to 00:00:00
+     * 
+     * However, the input type=date returns a date in the format YYYY-MM-DD
+     * Calling new Date('YYYY-MM-DD') returns a date with the HH:MM:SS set to 01:00:00
+     * (I'm not sure if this behaviour has anything to do with my timezone GMT+0100)
+     * 
+     * This can potentially cause some dates from being omitted when you use the filter function
+     * on new Date('MM/DD/YYYY') >= new Date('YYYY-MM-DD')
+     * e.g.
+     * new Date('03/02/2023') >= new Date('2023-03-02') will omit dates equals 03/02/2023 in the list
+     * because it has hours 00 and we are comparing it with a date with hours 01
+     * 
+     * To fix this bug, subtract 1 hour from the date the user sets on the screen using setHours 
+     * (which returns the number of milliseconds that have passed since midnight, Jan 1, 1970)
+     * and compare it with the number of milliseconds returned by calling getTime 
+     * (which also returns the number of milliseconds that have passed since midnight, Jan 1, 1970)
+     * on the date object in the list from ExpensesList.js
+     */
     if (merchantArray.some(isValidMerchant) && newStatus && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(value).setHours(new Date(value).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && newStatus && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(value).setHours(new Date(value).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus)));
     } else if (merchantArray.some(isValidMerchant) && newStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(value).setHours(new Date(value).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus || a.status === latestReimbursedStatus)));
     } else if (newStatus && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(value).setHours(new Date(value).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && newStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(value).setHours(new Date(value).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus)));
     } else if (newStatus && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(value).setHours(new Date(value).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus)));
     } else if (newStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(value).setHours(new Date(value).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus || a.status === latestReimbursedStatus)));
     } else if (newStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(value).setHours(new Date(value).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus)));
     } else if (merchantArray.some(isValidMerchant) && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(value).setHours(new Date(value).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(value).setHours(new Date(value).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestInProgressStatus)));
     } else if (merchantArray.some(isValidMerchant) && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(value).setHours(new Date(value).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestReimbursedStatus)));
     } else if (inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(value).setHours(new Date(value).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant)) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(value).setHours(new Date(value).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant));
     } else if (inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(value).setHours(new Date(value).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestInProgressStatus)));
     } else if (reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(value).setHours(new Date(value).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestReimbursedStatus)));
     } else {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(value).setHours(new Date(value).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
@@ -330,112 +351,112 @@ function ExpensesForm() {
     const isValidMerchant = (x) => x === merchant;
 
     if (merchantArray.some(isValidMerchant) && newStatus && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(value) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(value).setHours(new Date(value).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && newStatus && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(value) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(value).setHours(new Date(value).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus)));
     } else if (merchantArray.some(isValidMerchant) && newStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(value) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(value).setHours(new Date(value).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus || a.status === latestReimbursedStatus)));
     } else if (newStatus && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(value) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(value).setHours(new Date(value).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && newStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(value) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(value).setHours(new Date(value).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus)));
     } else if (newStatus && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(value) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(value).setHours(new Date(value).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus)));
     } else if (newStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(value) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(value).setHours(new Date(value).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus || a.status === latestReimbursedStatus)));
     } else if (newStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(value) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(value).setHours(new Date(value).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus)));
     } else if (merchantArray.some(isValidMerchant) && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(value) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(value).setHours(new Date(value).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(value) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(value).setHours(new Date(value).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestInProgressStatus)));
     } else if (merchantArray.some(isValidMerchant) && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(value) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(value).setHours(new Date(value).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestReimbursedStatus)));
     } else if (inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(value) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(value).setHours(new Date(value).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant)) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(value) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(value).setHours(new Date(value).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant));
     } else if (inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(value) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(value).setHours(new Date(value).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestInProgressStatus)));
     } else if (reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(value) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(value).setHours(new Date(value).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestReimbursedStatus)));
     } else {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(value) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(value).setHours(new Date(value).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
@@ -462,112 +483,112 @@ function ExpensesForm() {
     const isValidMerchant = (x) => x === merchant;
 
     if (merchantArray.some(isValidMerchant) && newStatus && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= value &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && newStatus && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= value &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus)));
     } else if (merchantArray.some(isValidMerchant) && newStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= value &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus || a.status === latestReimbursedStatus)));
     } else if (newStatus && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= value &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && newStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= value &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus)));
     } else if (newStatus && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= value &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus)));
     } else if (newStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= value &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus || a.status === latestReimbursedStatus)));
     } else if (newStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= value &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus)));
     } else if (merchantArray.some(isValidMerchant) && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= value &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= value &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestInProgressStatus)));
     } else if (merchantArray.some(isValidMerchant) && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= value &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestReimbursedStatus)));
     } else if (inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= value &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant)) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= value &&
         a.total <= latestMax &&
         a.merchant === latestMerchant));
     } else if (inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= value &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestInProgressStatus)));
     } else if (reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= value &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestReimbursedStatus)));
     } else {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= value &&
         a.total <= latestMax &&
         a.merchant !== "" &&
@@ -594,112 +615,112 @@ function ExpensesForm() {
     const isValidMerchant = (x) => x === merchant;
 
     if (merchantArray.some(isValidMerchant) && newStatus && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= value &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && newStatus && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= value &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus)));
     } else if (merchantArray.some(isValidMerchant) && newStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= value &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus || a.status === latestReimbursedStatus)));
     } else if (newStatus && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= value &&
         a.merchant !== "" &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && newStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= value &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus)));
     } else if (newStatus && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= value &&
         a.merchant !== "" &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus)));
     } else if (newStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= value &&
         a.merchant !== "" &&
         (a.status === latestNewStatus || a.status === latestReimbursedStatus)));
     } else if (newStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= value &&
         a.merchant !== "" &&
         (a.status === latestNewStatus)));
     } else if (merchantArray.some(isValidMerchant) && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= value &&
         a.merchant === latestMerchant &&
         (a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= value &&
         a.merchant === latestMerchant &&
         (a.status === latestInProgressStatus)));
     } else if (merchantArray.some(isValidMerchant) && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= value &&
         a.merchant === latestMerchant &&
         (a.status === latestReimbursedStatus)));
     } else if (inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= value &&
         a.merchant !== "" &&
         (a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant)) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= value &&
         a.merchant === latestMerchant));
     } else if (inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= value &&
         a.merchant !== "" &&
         (a.status === latestInProgressStatus)));
     } else if (reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= value &&
         a.merchant !== "" &&
         (a.status === latestReimbursedStatus)));
     } else {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= value &&
         a.merchant !== "" &&
@@ -726,57 +747,57 @@ function ExpensesForm() {
     // there is no need to add conditionals for when invalid merchants are selected
     // Also, there is no need to call setMerchant() as the onChange event handler already did this
     if (merchantArray.some(isValidMerchant) && newStatus && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === e.target.value &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && newStatus && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === e.target.value &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus)));
     } else if (merchantArray.some(isValidMerchant) && newStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === e.target.value &&
         (a.status === latestNewStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && newStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === e.target.value &&
         (a.status === latestNewStatus)));
     } else if (merchantArray.some(isValidMerchant) && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === e.target.value &&
         (a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === e.target.value &&
         (a.status === latestInProgressStatus)));
     } else if (merchantArray.some(isValidMerchant) && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === e.target.value &&
         (a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant)) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === e.target.value));
@@ -806,120 +827,120 @@ function ExpensesForm() {
     // When an invalid merchant is typed out, reset the input field to blank ("") when the user clicks 
     // outside of it, i.e. call setMerchant(""), in addition to calling setExpenses()
     if (merchantArray.some(isValidMerchant) && newStatus && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === e.target.value &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && newStatus && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === e.target.value &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus)));
     } else if (merchantArray.some(isValidMerchant) && newStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === e.target.value &&
         (a.status === latestNewStatus || a.status === latestReimbursedStatus)));
     } else if (newStatus && inProgressStatus && reimbursedStatus) {
       setMerchant("");
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && newStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === e.target.value &&
         (a.status === latestNewStatus)));
     } else if (newStatus && inProgressStatus) {
       setMerchant("");
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus)));
     } else if (newStatus && reimbursedStatus) {
       setMerchant("");
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus || a.status === latestReimbursedStatus)));
     } else if (newStatus) {
       setMerchant("");
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus)));
     } else if (merchantArray.some(isValidMerchant) && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === e.target.value &&
         (a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === e.target.value &&
         (a.status === latestInProgressStatus)));
     } else if (merchantArray.some(isValidMerchant) && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === e.target.value &&
         (a.status === latestReimbursedStatus)));
     } else if (inProgressStatus && reimbursedStatus) {
       setMerchant("");
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant)) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === e.target.value));
     } else if (inProgressStatus) {
       setMerchant("");
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestInProgressStatus)));
     } else if (reimbursedStatus) {
       setMerchant("");
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestReimbursedStatus)));
     } else {
       setMerchant("");
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
@@ -946,112 +967,112 @@ function ExpensesForm() {
     const isValidMerchant = (x) => x === merchant;
 
     if (merchantArray.some(isValidMerchant) && e.target.checked && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant && 
         (a.status === checked || a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && e.target.checked && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === checked || a.status === latestInProgressStatus)));
     } else if (merchantArray.some(isValidMerchant) && e.target.checked && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === checked || a.status === latestReimbursedStatus)));
     } else if (e.target.checked && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === checked || a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && e.target.checked) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === checked)));
     } else if (e.target.checked && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === checked || a.status === latestInProgressStatus)));
     } else if (e.target.checked && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === checked || a.status === latestReimbursedStatus)));
     } else if (e.target.checked) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === checked)));
     } else if (merchantArray.some(isValidMerchant) && !e.target.checked && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant && 
         (a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && !e.target.checked && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestInProgressStatus)));
     } else if (merchantArray.some(isValidMerchant) && !e.target.checked && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestReimbursedStatus)));
     } else if (!e.target.checked && inProgressStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestInProgressStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && !e.target.checked) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant));
     } else if (!e.target.checked && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestInProgressStatus)));
     } else if (!e.target.checked && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestReimbursedStatus)));
     } else {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
@@ -1077,112 +1098,112 @@ function ExpensesForm() {
     const isValidMerchant = (x) => x === merchant;
 
     if (merchantArray.some(isValidMerchant) && e.target.checked && newStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === checked || a.status === latestNewStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && e.target.checked && newStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === checked || a.status === latestNewStatus)));
     } else if (merchantArray.some(isValidMerchant) && e.target.checked && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === checked || a.status === latestReimbursedStatus)));
     } else if (e.target.checked && newStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === checked || a.status === latestNewStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && e.target.checked) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === checked)));
     } else if (e.target.checked && newStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === checked || a.status === latestNewStatus)));
     } else if (e.target.checked && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === checked || a.status === latestReimbursedStatus)));
     } else if (e.target.checked) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === checked)));
     } else if (merchantArray.some(isValidMerchant) && !e.target.checked && newStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && !e.target.checked && newStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus)));
     } else if (merchantArray.some(isValidMerchant) && !e.target.checked && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestReimbursedStatus)));
     } else if (!e.target.checked && newStatus && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus || a.status === latestReimbursedStatus)));
     } else if (merchantArray.some(isValidMerchant) && !e.target.checked) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant));
     } else if (!e.target.checked && newStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus)));
     } else if (!e.target.checked && reimbursedStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestReimbursedStatus)));
     } else {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
@@ -1207,112 +1228,112 @@ function ExpensesForm() {
     const isValidMerchant = (x) => x === merchant;
 
     if (merchantArray.some(isValidMerchant) && e.target.checked && newStatus && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === checked || a.status === latestNewStatus || a.status === latestInProgressStatus)));
     } else if (merchantArray.some(isValidMerchant) && e.target.checked && newStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === checked || a.status === latestNewStatus)));
     } else if (merchantArray.some(isValidMerchant) && e.target.checked && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === checked || a.status === latestInProgressStatus)));
     } else if (e.target.checked && newStatus && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === checked || a.status === latestNewStatus || a.status === latestInProgressStatus)));
     } else if (merchantArray.some(isValidMerchant) && e.target.checked) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === checked)));
     } else if (e.target.checked && newStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === checked || a.status === latestNewStatus)));
     } else if (e.target.checked && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === checked || a.status === latestInProgressStatus)));
     } else if (e.target.checked) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === checked)));
     } else if (merchantArray.some(isValidMerchant) && !e.target.checked && newStatus && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus)));
     } else if (merchantArray.some(isValidMerchant) && !e.target.checked && newStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestNewStatus)));
     } else if (merchantArray.some(isValidMerchant) && !e.target.checked && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant &&
         (a.status === latestInProgressStatus)));
     } else if (!e.target.checked && newStatus && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus || a.status === latestInProgressStatus)));
     } else if (merchantArray.some(isValidMerchant) && !e.target.checked) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant === latestMerchant));
     } else if (!e.target.checked && newStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestNewStatus)));
     } else if (!e.target.checked && inProgressStatus) {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
         (a.status === latestInProgressStatus)));
     } else {
-      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(firstDate) &&
-        new Date(a.createdAt) <= new Date(lastDate) &&
+      setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt).getTime() >= new Date(firstDate).setHours(new Date(firstDate).getHours() - 1) &&
+        new Date(a.createdAt).getTime() <= new Date(lastDate).setHours(new Date(lastDate).getHours() - 1) &&
         a.total >= latestMin &&
         a.total <= latestMax &&
         a.merchant !== "" &&
@@ -1349,12 +1370,12 @@ function ExpensesForm() {
 
     dateSort === 0 ? setExpenses(() => expenses.sort(
     // sort descending
-      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt).getTime()
     ))
       : dateSort === 1 ? setExpenses(() => expenses)
         : setExpenses(() => expenses.sort(
         // sort ascending
-          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt)
         ))
 
   }
