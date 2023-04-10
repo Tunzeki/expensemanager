@@ -4,8 +4,7 @@ import employeeExpenses from './ExpensesList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortAsc, faSortDesc } from '@fortawesome/free-solid-svg-icons';
 
-//const element = <FontAwesomeIcon icon={faEnvelope} />
-
+// This component visually shows Date and a `sort ascending` icon
 const DateSortAscIcon = () => {
   return (
     <>
@@ -14,6 +13,7 @@ const DateSortAscIcon = () => {
   );
 };
 
+// This component visually shows Date and a `sort descending` icon
 const DateSortDescIcon = () => {
   return (
     <>
@@ -22,6 +22,7 @@ const DateSortDescIcon = () => {
   );
 };
 
+// This component visually shows Date and a `sort neutral` icon
 const DateSortUpDownIcon = () => {
   return (
     <>
@@ -30,6 +31,7 @@ const DateSortUpDownIcon = () => {
   );
 };
 
+// This component visually shows Merchant and a `sort ascending` icon
 const MerchantSortAscIcon = () => {
   return (
     <>
@@ -38,6 +40,7 @@ const MerchantSortAscIcon = () => {
   );
 };
 
+// This component visually shows Merchant and a `sort descending` icon
 const MerchantSortDescIcon = () => {
   return (
     <>
@@ -46,6 +49,7 @@ const MerchantSortDescIcon = () => {
   );
 };
 
+// This component visually shows Merchant and a `sort neutral` icon
 const MerchantSortUpDownIcon = () => {
   return (
     <>
@@ -54,6 +58,7 @@ const MerchantSortUpDownIcon = () => {
   );
 };
 
+// This component visually shows Total and a `sort ascending` icon
 const TotalSortAscIcon = () => {
   return (
     <>
@@ -62,6 +67,7 @@ const TotalSortAscIcon = () => {
   );
 };
 
+// This component visually shows Total and a `sort descending` icon
 const TotalSortDescIcon = () => {
   return (
     <>
@@ -70,6 +76,7 @@ const TotalSortDescIcon = () => {
   );
 };
 
+// This component visually shows Total and a `sort neutral` icon
 const TotalSortUpDownIcon = () => {
   return (
     <>
@@ -78,6 +85,7 @@ const TotalSortUpDownIcon = () => {
   );
 };
 
+// This component visually shows Status and a `sort ascending` icon
 const StatusSortAscIcon = () => {
   return (
     <>
@@ -86,6 +94,7 @@ const StatusSortAscIcon = () => {
   );
 };
 
+// This component visually shows Status and a `sort descending` icon
 const StatusSortDescIcon = () => {
   return (
     <>
@@ -94,6 +103,7 @@ const StatusSortDescIcon = () => {
   );
 };
 
+// This component visually shows Status and a `sort neutral` icon
 const StatusSortUpDownIcon = () => {
   return (
     <>
@@ -102,6 +112,7 @@ const StatusSortUpDownIcon = () => {
   );
 };
 
+// This component visually shows Comment and a `sort ascending` icon
 const CommentSortAscIcon = () => {
   return (
     <>
@@ -110,6 +121,7 @@ const CommentSortAscIcon = () => {
   );
 };
 
+// This component visually shows Comment and a `sort descending` icon
 const CommentSortDescIcon = () => {
   return (
     <>
@@ -118,6 +130,7 @@ const CommentSortDescIcon = () => {
   );
 };
 
+// This component visually shows Comment and a `sort neutral` icon
 const CommentSortUpDownIcon = () => {
   return (
     <>
@@ -127,6 +140,7 @@ const CommentSortUpDownIcon = () => {
 };
 
 function ExpensesForm() {
+  // Declare state variables needed for the Form on the page
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [min, setMin] = useState("");
@@ -136,26 +150,31 @@ function ExpensesForm() {
   const [inProgressStatus, setInProgressStatus] = useState(true);
   const [reimbursedStatus, setReimbursedStatus] = useState(true);
 
+  // Declare state variable for the expenses data obtained from ExpensesList.js
+  // The initializer function sorts this data by Date in descending order
   const [expenses, setExpenses] = useState(() => employeeExpenses.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
 
+  // Declare state variables to store the state of the <th> elements JSX in the Table on the page
+  // These variables change in response to onClick events that occur when the text 
+  // in each of the <th> elements is clicked in an attempt to sort the table
+  // Neutral sort -> Ascending Sort -> Descending Sort -> back to Neutral Sort
+  // dateSort = 1 is for descending sort.
+  // All the initial values for the others are for neutral sort
   const [dateSort, setDateSort] = useState(1);
-
-
- // const [tableSort, setTableSort] = useState(() => <SortDateDescFunction expenses={expenses} />);
-
   const [merchantSort, setMerchantSort] = useState(3);
-
   const [totalSort, setTotalSort] = useState(6);
-
   const [statusSort, setStatusSort] = useState(9);
-
   const [commentSort, setCommentSort] = useState(12);
 
+  // This function is called in response to an onChange event in the `From` input element
   const handleFromDate = (e) => {
     setFromDate(e.target.value);
     // hard coded values... To be changed to dynamic later
     const value = e.target.value === "" ? "2023-03-02" : e.target.value;   
 
+    // Even though the user is currently interacting with this input element only,
+    // the data displayed on the table ( set using setExpenses() ) must take into account 
+    // the values of the other input elements
     const lastDate = toDate === "" ? "2023-03-09" : toDate;
     const latestMin = min === "" ? 10.89 : min;
     const latestMax = max === "" ? 809.37 : max;
@@ -164,10 +183,20 @@ function ExpensesForm() {
     const latestInProgressStatus = inProgressStatus === true ? "In Progress" : false;
     const latestReimbursedStatus = reimbursedStatus === true ? "Reimbursed" : false;
 
+    // Define an array for the possible values of merchant
+    // and a function that will be used as a callback fn to check 
+    // if the value of merchant exists as one of the elements in the array
     const merchantArray = ["Shuttle", "Fast food", "Electronics", "Restaurant", "Breakfast",
       "Parking", "Office supplies", "Rental car", "Hotel", "Taxi", "Ride sharing", "Airline"];
     const isValidMerchant = (x) => x === merchant;
 
+    // merchant can either be an element in the merchantArray or ""
+    // newStatus, inProgressStatus, and reimbursedStatus may be true or false
+    // depending on if their respective checkboxes are checked
+
+    // The logic for calling setExpenses varies with the values of these variables,
+    // hence, these conditions exist to ensure that the correct logic is used 
+    // for all their possible values
     if (merchantArray.some(isValidMerchant) && newStatus && inProgressStatus && reimbursedStatus) {
       setExpenses(() => employeeExpenses.filter((a) => new Date(a.createdAt) >= new Date(value) &&
         new Date(a.createdAt) <= new Date(lastDate) &&
@@ -1301,10 +1330,18 @@ function ExpensesForm() {
   }
 
   const sortDate = () => {
+    // When Date is clicked in an attempt to sort it,
+    // call necessary state variables and
+    // display the components that show other <th> with neutral icons
     setMerchantSort(3);
     setTotalSort(6);
     setStatusSort(9);
     setCommentSort(12);
+
+    // For date:
+    // 0, 1, 2 -> ascending, descending, neutral
+    // for all others:
+    // x, x+1, x+2 -> neutral, ascending, descending
 
     dateSort === 0 ? setDateSort(1)
       : dateSort === 1 ? setDateSort(2)
@@ -1454,9 +1491,7 @@ function ExpensesForm() {
                 <div className='mt-3'>
                   <div className="small d-flex justify-content-between">
                     <span>Filter Expenses</span>
-                {/* <a href="#" onClick={clearFilters} className="text-primary text-decoration-none">Clear Filters</a> */}
                     <button type="button" onClick={clearFilters} className="text-primary btn-unstyled">Clear Filters</button>
-                    {/* <button type="button" className="btn text-primary">Clear Filters</button> */}
                   </div>
 
                   <hr />
@@ -1557,7 +1592,6 @@ function ExpensesForm() {
                 </tr>
               </thead>
               <tbody>
-                {/* {tableSort} */}
                 {expenses.map((a) => {
                   return (
                     <tr>
@@ -1574,8 +1608,7 @@ function ExpensesForm() {
               </tbody>
             </table>
           </div>
-            
-            {/* <ExpensesTable data={expenses} /> */} 
+             
         </div>
         <div className='col-2'>
           <div className='pt-2'>
