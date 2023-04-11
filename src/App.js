@@ -1618,7 +1618,7 @@ function ExpensesForm() {
               <tbody>
                 {expenses.map((a) => {
                   return (
-                    <tr>
+                    <tr key={a.id}>
                       <td>{a.createdAt}</td>
                       <td>{a.merchant}</td>
                       <td>{a.total}</td>
