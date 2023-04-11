@@ -1347,6 +1347,9 @@ function ExpensesForm() {
     setMin("");
     setMax("");
     setMerchant("");
+    setNewStatus(true);
+    setInProgressStatus(true);
+    setReimbursedStatus(true);
     setExpenses(() => employeeExpenses)
   }
 
