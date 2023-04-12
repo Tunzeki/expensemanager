@@ -8,7 +8,7 @@ import { faSort, faSortAsc, faSortDesc } from '@fortawesome/free-solid-svg-icons
 const DateSortAscIcon = () => {
   return (
     <>
-      <span className="pointer-cursor">
+      <span className="pointer-cursor th-blue">
         Date <FontAwesomeIcon icon={faSortAsc} />
       </span>
     </>
@@ -19,7 +19,7 @@ const DateSortAscIcon = () => {
 const DateSortDescIcon = () => {
   return (
     <>
-      <span className="pointer-cursor">
+      <span className="pointer-cursor th-blue">
         Date <FontAwesomeIcon icon={faSortDesc} />
       </span>
     </>
@@ -41,7 +41,7 @@ const DateSortUpDownIcon = () => {
 const MerchantSortAscIcon = () => {
   return (
     <>
-      <span className="pointer-cursor">
+      <span className="pointer-cursor th-blue">
         Merchant <FontAwesomeIcon icon={faSortAsc} />
       </span>
     </>
@@ -52,7 +52,7 @@ const MerchantSortAscIcon = () => {
 const MerchantSortDescIcon = () => {
   return (
     <>
-      <span className="pointer-cursor">
+      <span className="pointer-cursor th-blue">
         Merchant <FontAwesomeIcon icon={faSortDesc} />
       </span>
     </>
@@ -74,7 +74,7 @@ const MerchantSortUpDownIcon = () => {
 const TotalSortAscIcon = () => {
   return (
     <>
-      <span className="pointer-cursor">
+      <span className="pointer-cursor th-blue">
         Total <FontAwesomeIcon icon={faSortAsc} />
       </span>
     </>
@@ -85,7 +85,7 @@ const TotalSortAscIcon = () => {
 const TotalSortDescIcon = () => {
   return (
     <>
-      <span className="pointer-cursor">
+      <span className="pointer-cursor th-blue">
         Total <FontAwesomeIcon icon={faSortDesc} />
       </span>
     </>
@@ -107,7 +107,7 @@ const TotalSortUpDownIcon = () => {
 const StatusSortAscIcon = () => {
   return (
     <>
-      <span className="pointer-cursor">
+      <span className="pointer-cursor th-blue">
         Status <FontAwesomeIcon icon={faSortAsc} />
       </span>
     </>
@@ -118,7 +118,7 @@ const StatusSortAscIcon = () => {
 const StatusSortDescIcon = () => {
   return (
     <>
-      <span className="pointer-cursor">
+      <span className="pointer-cursor th-blue">
         Status <FontAwesomeIcon icon={faSortDesc} />
       </span>
     </>
@@ -140,7 +140,7 @@ const StatusSortUpDownIcon = () => {
 const CommentSortAscIcon = () => {
   return (
     <>
-      <span className="pointer-cursor">
+      <span className="pointer-cursor th-blue">
         Comment <FontAwesomeIcon icon={faSortAsc} />
       </span>
     </>
@@ -151,7 +151,7 @@ const CommentSortAscIcon = () => {
 const CommentSortDescIcon = () => {
   return (
     <>
-      <span className="pointer-cursor">
+      <span className="pointer-cursor th-blue">
         Comment <FontAwesomeIcon icon={faSortDesc} />
       </span>
     </>
