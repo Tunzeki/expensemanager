@@ -8,7 +8,9 @@ import { faSort, faSortAsc, faSortDesc } from '@fortawesome/free-solid-svg-icons
 const DateSortAscIcon = () => {
   return (
     <>
-      Date <FontAwesomeIcon icon={faSortAsc} />
+      <span className="pointer-cursor">
+        Date <FontAwesomeIcon icon={faSortAsc} />
+      </span>
     </>
   );
 };
@@ -17,7 +19,9 @@ const DateSortAscIcon = () => {
 const DateSortDescIcon = () => {
   return (
     <>
-      Date <FontAwesomeIcon icon={faSortDesc} />
+      <span className="pointer-cursor">
+        Date <FontAwesomeIcon icon={faSortDesc} />
+      </span>
     </>
   );
 };
@@ -26,7 +30,9 @@ const DateSortDescIcon = () => {
 const DateSortUpDownIcon = () => {
   return (
     <>
-      Date <FontAwesomeIcon icon={faSort} />
+      <span className="pointer-cursor">
+        Date <FontAwesomeIcon icon={faSort} />
+      </span>
     </>
   );
 };
@@ -35,7 +41,9 @@ const DateSortUpDownIcon = () => {
 const MerchantSortAscIcon = () => {
   return (
     <>
-      Merchant <FontAwesomeIcon icon={faSortAsc} />
+      <span className="pointer-cursor">
+        Merchant <FontAwesomeIcon icon={faSortAsc} />
+      </span>
     </>
   );
 };
@@ -44,7 +52,9 @@ const MerchantSortAscIcon = () => {
 const MerchantSortDescIcon = () => {
   return (
     <>
-      Merchant <FontAwesomeIcon icon={faSortDesc} />
+      <span className="pointer-cursor">
+        Merchant <FontAwesomeIcon icon={faSortDesc} />
+      </span>
     </>
   );
 };
@@ -53,7 +63,9 @@ const MerchantSortDescIcon = () => {
 const MerchantSortUpDownIcon = () => {
   return (
     <>
-      Merchant <FontAwesomeIcon icon={faSort} />
+      <span className="pointer-cursor">
+        Merchant <FontAwesomeIcon icon={faSort} />
+      </span>
     </>
   );
 };
@@ -62,7 +74,9 @@ const MerchantSortUpDownIcon = () => {
 const TotalSortAscIcon = () => {
   return (
     <>
-      Total <FontAwesomeIcon icon={faSortAsc} />
+      <span className="pointer-cursor">
+        Total <FontAwesomeIcon icon={faSortAsc} />
+      </span>
     </>
   );
 };
@@ -71,7 +85,9 @@ const TotalSortAscIcon = () => {
 const TotalSortDescIcon = () => {
   return (
     <>
-      Total <FontAwesomeIcon icon={faSortDesc} />
+      <span className="pointer-cursor">
+        Total <FontAwesomeIcon icon={faSortDesc} />
+      </span>
     </>
   );
 };
@@ -80,7 +96,9 @@ const TotalSortDescIcon = () => {
 const TotalSortUpDownIcon = () => {
   return (
     <>
-      Total <FontAwesomeIcon icon={faSort} />
+      <span className="pointer-cursor">
+        Total <FontAwesomeIcon icon={faSort} />
+      </span>
     </>
   );
 };
@@ -89,7 +107,9 @@ const TotalSortUpDownIcon = () => {
 const StatusSortAscIcon = () => {
   return (
     <>
-      Status <FontAwesomeIcon icon={faSortAsc} />
+      <span className="pointer-cursor">
+        Status <FontAwesomeIcon icon={faSortAsc} />
+      </span>
     </>
   );
 };
@@ -98,7 +118,9 @@ const StatusSortAscIcon = () => {
 const StatusSortDescIcon = () => {
   return (
     <>
-      Status <FontAwesomeIcon icon={faSortDesc} />
+      <span className="pointer-cursor">
+        Status <FontAwesomeIcon icon={faSortDesc} />
+      </span>
     </>
   );
 };
@@ -107,7 +129,9 @@ const StatusSortDescIcon = () => {
 const StatusSortUpDownIcon = () => {
   return (
     <>
-      Status <FontAwesomeIcon icon={faSort} />
+      <span className="pointer-cursor">
+        Status <FontAwesomeIcon icon={faSort} />
+      </span>
     </>
   );
 };
@@ -116,7 +140,9 @@ const StatusSortUpDownIcon = () => {
 const CommentSortAscIcon = () => {
   return (
     <>
-      Comment <FontAwesomeIcon icon={faSortAsc} />
+      <span className="pointer-cursor">
+        Comment <FontAwesomeIcon icon={faSortAsc} />
+      </span>
     </>
   );
 };
@@ -125,7 +151,9 @@ const CommentSortAscIcon = () => {
 const CommentSortDescIcon = () => {
   return (
     <>
-      Comment <FontAwesomeIcon icon={faSortDesc} />
+      <span className="pointer-cursor">
+        Comment <FontAwesomeIcon icon={faSortDesc} />
+      </span>
     </>
   );
 };
@@ -134,7 +162,9 @@ const CommentSortDescIcon = () => {
 const CommentSortUpDownIcon = () => {
   return (
     <>
-      Comment <FontAwesomeIcon icon={faSort} />
+      <span className="pointer-cursor">
+        Comment <FontAwesomeIcon icon={faSort} />
+      </span>
     </>
   );
 };
