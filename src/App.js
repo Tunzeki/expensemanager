@@ -1715,7 +1715,10 @@ function ExpensesForm() {
                       <td>{a.createdAt}</td>
                       <td>{a.merchant}</td>
                       <td>${a.total}</td>
-                      <td>{a.status}</td>
+                      {a.status === "Reimbursed"
+                        ? <td className="reimbursed-status">{a.status}</td> : a.status === "New"
+                          ? <td className="new-status">{a.status}</td> : <td className="inprogress-status">{a.status}</td>}
+                      {/* <td>{a.status}</td> */}
                       <td>{a.comment}</td>
                     </tr>
                   );

@@ -89,3 +89,13 @@
   max-height: 100vh;
   overflow: auto;
 }
+
+.new-status {
+  color: #ff4238;
+  font-weight: 500;
+}
+
+.inprogress-status {
+  font-style: italic;
+  font-weight: 500;
+}
