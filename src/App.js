@@ -1733,7 +1733,7 @@ function ExpensesForm() {
               <FontAwesomeIcon icon={faCirclePlus} />
             </span>
             <AddExpenseModal isOpen={showAddExpenseModal}>
-              <form method="post" encType="multipart/form-data">
+              <form encType="multipart/form-data">
                 <div className="container-fluid">
                   <div className="row">
                     <div className="col-6">
