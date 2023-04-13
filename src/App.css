@@ -54,3 +54,38 @@
 .th-blue {
   color: #1676F3;
 }
+
+.bottom-right {
+  font-size: 50px;
+  color: #ff4238;
+  position: fixed;
+  bottom: 32px;
+  right: 20%;
+  z-index: 1;
+}
+
+.modal-box {
+  width: 700px;
+}
+
+.receipt-btn {
+  width: 125.5px;
+  height: 44px;
+  margin: 0px 6px 6px 0px;
+}
+
+.receipt-uploads {
+  opacity: 0;
+}
+
+.receipt {
+  max-width: 300px;
+  padding: 0;
+  box-sizing: border-box;
+  
+}
+
+.receipt-col {
+  max-height: 100vh;
+  overflow: auto;
+}

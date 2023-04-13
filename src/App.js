@@ -2,7 +2,8 @@ import { useState } from 'react';
 import './App.css';
 import employeeExpenses from './ExpensesList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort, faSortAsc, faSortDesc } from '@fortawesome/free-solid-svg-icons';
+import { faSort, faSortAsc, faSortDesc, faCirclePlus } from '@fortawesome/free-solid-svg-icons';
+import AddExpenseModal from './AddExpenseModal';
 
 // This component visually shows Date and a `sort ascending` icon
 const DateSortAscIcon = () => {
@@ -195,6 +196,9 @@ function ExpensesForm() {
   const [totalSort, setTotalSort] = useState(6);
   const [statusSort, setStatusSort] = useState(9);
   const [commentSort, setCommentSort] = useState(12);
+
+  // State variable whose value determines when to show the AddExpenseModal component
+  const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
 
   // This function is called in response to an onChange event in the `From` input element
   const handleFromDate = (e) => {
@@ -1537,6 +1541,65 @@ function ExpensesForm() {
 
   }
 
+  const handleReceipt = () => {
+    const input = document.querySelector('.receipt-uploads');
+    const preview = document.querySelector('.preview');
+
+    // https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types
+    const fileTypes = [
+      "image/apng",
+      "image/bmp",
+      "image/gif",
+      "image/jpeg",
+      "image/pjpeg",
+      "image/png",
+      "image/svg+xml",
+      "image/tiff",
+      "image/webp",
+      "image/x-icon"
+    ];
+
+    const validFileType = (file) => {
+      return fileTypes.includes(file.type);
+    }
+
+    const updateImageDisplay = () => {
+
+      while (preview.firstChild) {
+        preview.removeChild(preview.firstChild);
+      }
+
+      const curFiles = input.files;
+      if (curFiles.length === 0) {
+        const para = document.createElement('p');
+        para.textContent = 'No files currently selected for upload';
+        preview.appendChild(para);
+      } else {
+        const para = document.createElement('p');
+        
+
+        for (const file of curFiles) {
+          if (validFileType(file)) {
+            const image = document.createElement('img');
+            image.src = URL.createObjectURL(file);
+            image.className = "receipt";
+            preview.appendChild(image);
+          } else {
+            const receiptItem = document.createElement('div');
+            preview.appendChild(receiptItem);
+            para.textContent = `File name ${file.name}: Not a valid file type. Update your selection.`;
+            receiptItem.appendChild(para);
+          }
+        }
+      }
+    }
+
+    input.addEventListener('change', updateImageDisplay);
+  }
+
+  
+
+
   return (
     <div className='container-fluid'>
           <div className='row text-start'>
@@ -1573,8 +1636,8 @@ function ExpensesForm() {
                   </div>
                 </div>
                 <div>
-              <label htmlFor='merchant' className='form-label mt-3'>Merchant</label>
-              <input list="merchants" id="merchant" value={merchant} onChange={(e) => setMerchant(e.target.value)} onSelect={selectMerchant} onBlur={handleMerchant} className="form-control" />
+                  <label htmlFor='merchant' className='form-label mt-3'>Merchant</label>
+                  <input list="merchants" id="merchant" value={merchant} onChange={(e) => setMerchant(e.target.value)} onSelect={selectMerchant} onBlur={handleMerchant} className="form-control" />
                   <datalist id='merchants'>
                     <option value='Shuttle' />
                     <option value='Fast food' />
@@ -1589,7 +1652,7 @@ function ExpensesForm() {
                     <option value="Ride sharing" />
                     <option value="Airline" />
                   </datalist>
-            </div>
+                </div>
             <div className="mt-3">
               Status
               <div className="row mb-2">
@@ -1661,7 +1724,76 @@ function ExpensesForm() {
 
               </tbody>
             </table>
-          </div>
+            <span className="bottom-right pointer-cursor" onClick={() => {
+              setShowAddExpenseModal(true);
+            }}>
+              <FontAwesomeIcon icon={faCirclePlus} />
+            </span>
+            <AddExpenseModal isOpen={showAddExpenseModal}>
+              <form method="post" encType="multipart/form-data">
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="col-6">
+                      <div className="h3">Add Expense</div>
+                      
+                        <div>
+                          <label className='form-label mt-3'>
+                            Merchant
+                            <input list="merchants" className="form-control" />
+                            <datalist id='merchants'>
+                              <option value='Shuttle' />
+                              <option value='Fast food' />
+                              <option value='Electronics' />
+                              <option value='Restaurant' />
+                              <option value="Breakfast" />
+                              <option value="Parking" />
+                              <option value="Office supplies" />
+                              <option value="Rental car" />
+                              <option value="Hotel" />
+                              <option value="Taxi" />
+                              <option value="Ride sharing" />
+                              <option value="Airline" />
+                              </datalist>
+                            </label>
+                        </div>
+                        <div className="">
+                          <label className='form-label mt-3'>
+                            Total
+                            <input type="number" className='form-control' />
+                          </label>
+                        </div>
+                        <div>
+                          <label className='form-label mt-3'>
+                            Date
+                            <input type="date" className='form-control' />
+                          </label>
+                        </div>
+                        <div>
+                          <label className='form-label mt-3'>
+                            Comment
+                            <textarea rows="4" className='form-control' />
+                          </label>
+                        </div>
+                        
+                        <button type="submit" className="btn btn-primary me-3">Save</button>
+                        <button type="button" className="btn btn-light text-primary" onClick={() => {
+                          setShowAddExpenseModal(false);
+                        }}>Cancel</button>
+                      
+                    </div>
+                    <div className="col-6 receipt-col">
+                      <div className="row">
+                        <label onClick={handleReceipt} className="btn btn-light text-primary mt-3 receipt-btn"> Select receipt
+                          <input type="file" className="receipt-uploads" />
+                        </label> 
+                      </div>
+                      <div className="row preview"></div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </AddExpenseModal>
+          </div>         
              
         </div>
         <div className='col-2'>
@@ -1677,6 +1809,7 @@ function ExpensesForm() {
                 }
           </div>
         </div>
+        
           </div>
         </div>
   );
