@@ -1714,7 +1714,7 @@ function ExpensesForm() {
                     <tr key={a.id}>
                       <td>{a.createdAt}</td>
                       <td>{a.merchant}</td>
-                      <td>{a.total}</td>
+                      <td>${a.total}</td>
                       <td>{a.status}</td>
                       <td>{a.comment}</td>
                     </tr>
