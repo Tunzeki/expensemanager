@@ -1603,7 +1603,7 @@ function ExpensesForm() {
   return (
     <div className='container-fluid'>
           <div className='row text-start'>
-            <div className='col-3'>
+        <div className='col-3 d-none d-lg-block'>
               <form>
                 <div className='mt-3'>
                   <div className="small d-flex justify-content-between">
@@ -1676,7 +1676,7 @@ function ExpensesForm() {
             </div>
               </form>
           </div>
-        <div className='col-7'>
+        <div className='col-lg-7 d-none d-lg-table'>
           <div className="table-responsive">
             <table className='table'>
               <thead>
@@ -1799,7 +1799,7 @@ function ExpensesForm() {
           </div>         
              
         </div>
-        <div className='col-2'>
+        <div className='col-2 d-none d-lg-block'>
           <div className='pt-2'>
             <small>To be reimbursed</small>
             <hr />
