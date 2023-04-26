@@ -1681,27 +1681,27 @@ function ExpensesForm() {
     <table className='table'>
       <thead>
         <tr>
-          <th onClick={sortDate}>
+          <th className="w-8" onClick={sortDate}>
             {dateSort === 1 ? <DateSortDescIcon />
               : dateSort === 0 ? <DateSortAscIcon />
                 : <DateSortUpDownIcon />}
           </th>
-          <th onClick={sortMerchant}>
+          <th className="w-8" onClick={sortMerchant}>
             {merchantSort === 5 ? <MerchantSortDescIcon />
               : merchantSort === 4 ? <MerchantSortAscIcon />
                 : <MerchantSortUpDownIcon />}
           </th>
-          <th onClick={sortTotal}>
+          <th className="w-6" onClick={sortTotal}>
             {totalSort === 8 ? <TotalSortDescIcon />
               : totalSort === 7 ? <TotalSortAscIcon />
                 : <TotalSortUpDownIcon />}
           </th>
-          <th onClick={sortStatus}>
+          <th className="w-8" onClick={sortStatus}>
             {statusSort === 11 ? <StatusSortDescIcon />
               : statusSort === 10 ? <StatusSortAscIcon />
                 : <StatusSortUpDownIcon />}
           </th>
-          <th onClick={sortComment}>
+          <th className="w-16" onClick={sortComment}>
             {commentSort === 14 ? <CommentSortDescIcon />
               : commentSort === 13 ? <CommentSortAscIcon />
                 : <CommentSortUpDownIcon />}
@@ -1712,14 +1712,14 @@ function ExpensesForm() {
         {expenses.map((a) => {
           return (
             <tr key={a.id}>
-              <td>{a.createdAt}</td>
-              <td>{a.merchant}</td>
-              <td>${a.total}</td>
+              <td className="w-8">{a.createdAt}</td>
+              <td className="w-8">{a.merchant}</td>
+              <td className="w-6">${a.total}</td>
               {a.status === "Reimbursed"
-                ? <td className="reimbursed-status">{a.status}</td> : a.status === "New"
-                  ? <td className="new-status">{a.status}</td> : <td className="inprogress-status">{a.status}</td>}
+                ? <td className="reimbursed-status w-8">{a.status}</td> : a.status === "New"
+                  ? <td className="new-status w-8">{a.status}</td> : <td className="inprogress-status w-8">{a.status}</td>}
               {/* <td>{a.status}</td> */}
-              <td>{a.comment}</td>
+              <td className="w-16">{a.comment}</td>
             </tr>
           );
         })}

@@ -117,3 +117,15 @@
 .mt-70 {
   margin-top: 70px;
 }
+
+.w-6 {
+  min-width: 6em;
+}
+
+.w-8 {
+  min-width: 8em;
+}
+
+.w-16 {
+  min-width: 16em;
+}
