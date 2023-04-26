@@ -1675,7 +1675,57 @@ function ExpensesForm() {
         </button>
       </div>
     </form>
-  )
+  );
+
+  const myTable = (
+    <table className='table'>
+      <thead>
+        <tr>
+          <th onClick={sortDate}>
+            {dateSort === 1 ? <DateSortDescIcon />
+              : dateSort === 0 ? <DateSortAscIcon />
+                : <DateSortUpDownIcon />}
+          </th>
+          <th onClick={sortMerchant}>
+            {merchantSort === 5 ? <MerchantSortDescIcon />
+              : merchantSort === 4 ? <MerchantSortAscIcon />
+                : <MerchantSortUpDownIcon />}
+          </th>
+          <th onClick={sortTotal}>
+            {totalSort === 8 ? <TotalSortDescIcon />
+              : totalSort === 7 ? <TotalSortAscIcon />
+                : <TotalSortUpDownIcon />}
+          </th>
+          <th onClick={sortStatus}>
+            {statusSort === 11 ? <StatusSortDescIcon />
+              : statusSort === 10 ? <StatusSortAscIcon />
+                : <StatusSortUpDownIcon />}
+          </th>
+          <th onClick={sortComment}>
+            {commentSort === 14 ? <CommentSortDescIcon />
+              : commentSort === 13 ? <CommentSortAscIcon />
+                : <CommentSortUpDownIcon />}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {expenses.map((a) => {
+          return (
+            <tr key={a.id}>
+              <td>{a.createdAt}</td>
+              <td>{a.merchant}</td>
+              <td>${a.total}</td>
+              {a.status === "Reimbursed"
+                ? <td className="reimbursed-status">{a.status}</td> : a.status === "New"
+                  ? <td className="new-status">{a.status}</td> : <td className="inprogress-status">{a.status}</td>}
+              {/* <td>{a.status}</td> */}
+              <td>{a.comment}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
 
   
 
@@ -1702,7 +1752,12 @@ function ExpensesForm() {
           <div className="collapse navbar-collapse bg-grey" id="collapsibleForm">
             {myForm}
           </div>
-        </div> 
+        </div>
+        <div className="row">
+          <div className="table-responsive">
+            {myTable}
+          </div>
+        </div>
       </div>
 
       {/* Show on Large Screens */}
@@ -1712,55 +1767,7 @@ function ExpensesForm() {
         </div>
         <div className='col-lg-7 d-none d-lg-table'>
           <div className="table-responsive">
-            <table className='table'>
-              <thead>
-                <tr>
-                  <th onClick={sortDate}>
-                    {dateSort === 1 ? <DateSortDescIcon />
-                      : dateSort === 0 ? <DateSortAscIcon />
-                        : <DateSortUpDownIcon />}
-                  </th>
-                  <th onClick={sortMerchant}>
-                    {merchantSort === 5 ? <MerchantSortDescIcon />
-                      : merchantSort === 4 ? <MerchantSortAscIcon />
-                        : <MerchantSortUpDownIcon />}
-                  </th>
-                  <th onClick={sortTotal}>
-                    {totalSort === 8 ? <TotalSortDescIcon />
-                      : totalSort === 7 ? <TotalSortAscIcon />
-                        : <TotalSortUpDownIcon />}
-                  </th>
-                  <th onClick={sortStatus}>
-                    {statusSort === 11 ? <StatusSortDescIcon />
-                      : statusSort === 10 ? <StatusSortAscIcon />
-                        : <StatusSortUpDownIcon />}
-                  </th>
-                  <th onClick={sortComment}>
-                    {commentSort === 14 ? <CommentSortDescIcon />
-                      : commentSort === 13 ? <CommentSortAscIcon />
-                        : <CommentSortUpDownIcon />}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {expenses.map((a) => {
-                  return (
-                    <tr key={a.id}>
-                      <td>{a.createdAt}</td>
-                      <td>{a.merchant}</td>
-                      <td>${a.total}</td>
-                      {a.status === "Reimbursed"
-                        ? <td className="reimbursed-status">{a.status}</td> : a.status === "New"
-                          ? <td className="new-status">{a.status}</td> : <td className="inprogress-status">{a.status}</td>}
-                      {/* <td>{a.status}</td> */}
-                      <td>{a.comment}</td>
-                    </tr>
-                  );
-
-                })}
-
-              </tbody>
-            </table>
+            {myTable}
             <span className="bottom-right pointer-cursor" onClick={() => {
               setShowAddExpenseModal(true);
             }}>
