@@ -107,3 +107,13 @@
 .btn-grey {
   background-color: #EFEFEF;
 }
+
+.pos-fixed {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+}
+
+.mt-70 {
+  margin-top: 70px;
+}

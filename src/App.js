@@ -1731,7 +1731,7 @@ function ExpensesForm() {
 
 
   return (
-    <div className='container-fluid'>
+    <div className='container-fluid mt-70'>
       {/* Show on Mobile Devices and other Small Screens */}
       <div className="d-lg-none">
         <div className="row text-start">
@@ -1863,7 +1863,7 @@ function App() {
   return (
     <div className="App">
       <div>
-        <nav className="navbar bg-dark navbar-dark py-3">
+        <nav className="navbar bg-dark navbar-dark py-3 pos-fixed">
           <div className="container-fluid">
             <span className="navbar-brand">Expense Manager</span>
             <div>
