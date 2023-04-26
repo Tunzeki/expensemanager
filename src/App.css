@@ -99,3 +99,11 @@
   font-style: italic;
   font-weight: 500;
 }
+
+.bg-grey {
+  background-color: hsla(214, 61%, 25%, 0.05)
+}
+
+.btn-grey {
+  background-color: #EFEFEF;
+}

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './App.css';
 import employeeExpenses from './ExpensesList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort, faSortAsc, faSortDesc, faCirclePlus } from '@fortawesome/free-solid-svg-icons';
+import { faSort, faSortAsc, faSortDesc, faCirclePlus, faBars } from '@fortawesome/free-solid-svg-icons';
 import AddExpenseModal from './AddExpenseModal';
 
 // This component visually shows Date and a `sort ascending` icon
@@ -1597,85 +1597,119 @@ function ExpensesForm() {
     input.addEventListener('change', updateImageDisplay);
   }
 
+  const myForm = (
+    <form>
+      <div className='mt-3 d-none d-lg-block'>
+        <div className="small d-flex justify-content-between">
+          <span>Filter Expenses</span>
+          <button type="button" onClick={clearFilters} className="text-primary btn-unstyled">Clear Filters</button>
+        </div>
+        <hr />
+      </div>
+      <div>
+        <label htmlFor='from' className='form-label mt-3'>From</label>
+        <input type="date" id='from' value={fromDate} onChange={handleFromDate} className='form-control' />
+      </div>
+      <div>
+        <label htmlFor='to' className='form-label mt-3'>To</label>
+        <input type="date" id='to' value={toDate} onChange={handleToDate} className='form-control' />
+      </div>
+      <div className='row'>
+        <div className='col-5'>
+          <label htmlFor='min' className='form-label mt-3'>Min</label>
+          <input type="number" id='min' value={min} onChange={handleMin} className='form-control' />
+        </div>
+        <div className='col-1'>
+          <label className='form-label mt-3'></label>
+          <input type="text" value='-' className='form-control-plaintext mt-3' disabled />
+        </div>
+        <div className='col-5'>
+          <label htmlFor='max' className='form-label mt-3'>Max</label>
+          <input type="number" id='max' value={max} onChange={handleMax} className='form-control' />
+        </div>
+      </div>
+      <div>
+        <label htmlFor='merchant' className='form-label mt-3'>Merchant</label>
+        <input list="merchants" id="merchant" value={merchant} onChange={(e) => setMerchant(e.target.value)} onSelect={selectMerchant} onBlur={handleMerchant} className="form-control" />
+        <datalist id='merchants'>
+          <option value='Shuttle' />
+          <option value='Fast food' />
+          <option value='Electronics' />
+          <option value='Restaurant' />
+          <option value="Breakfast" />
+          <option value="Parking" />
+          <option value="Office supplies" />
+          <option value="Rental car" />
+          <option value="Hotel" />
+          <option value="Taxi" />
+          <option value="Ride sharing" />
+          <option value="Airline" />
+        </datalist>
+      </div>
+      <div className="mt-3">
+        Status
+        <div className="row mb-2">
+          <div className="col-3">
+            <label>
+              <input type="checkbox" checked={newStatus} onChange={handleNewStatus} className="form-check-input" /> New
+            </label>
+          </div>
+          <div className="col-5">
+            <label>
+              <input type="checkbox" checked={inProgressStatus} onChange={handleInProgressStatus} className="form-check-input" /> In Progress
+            </label>
+          </div>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" checked={reimbursedStatus} onChange={handleReimbursedStatus} className="form-check-input" /> Reimbursed
+          </label>
+        </div>
+      </div>
+      <div className="d-flex d-lg-none justify-content-between mt-3 mb-3">
+        <button type="button" onClick={clearFilters} className="text-primary bg-grey" style={{ borderStyle: "none", backgroundColor: "inherit", }}>
+          Clear Filters
+        </button>
+        <button type="button" className="btn btn-light text-primary btn-grey" data-bs-toggle="collapse" data-bs-target="#collapsibleForm">
+          Done
+        </button>
+      </div>
+    </form>
+  )
+
   
 
 
   return (
     <div className='container-fluid'>
-          <div className='row text-start'>
-        <div className='col-3 d-none d-lg-block'>
-              <form>
-                <div className='mt-3'>
-                  <div className="small d-flex justify-content-between">
-                    <span>Filter Expenses</span>
-                    <button type="button" onClick={clearFilters} className="text-primary btn-unstyled">Clear Filters</button>
-                  </div>
-
-                  <hr />
-                </div>
-                <div>
-                  <label htmlFor='from' className='form-label mt-3'>From</label>
-                  <input type="date" id='from' value={fromDate} onChange={handleFromDate} className='form-control' />
-                </div>
-                <div>
-                  <label htmlFor='to' className='form-label mt-3'>To</label>
-                  <input type="date" id='to' value={toDate} onChange={handleToDate} className='form-control' />
-                </div>
-                <div className='row'>
-                  <div className='col-5'>
-                    <label htmlFor='min' className='form-label mt-3'>Min</label>
-                    <input type="number" id='min' value={min} onChange={handleMin} className='form-control' />
-                  </div>
-                  <div className='col-1'>
-                    <label className='form-label mt-3'></label>
-                    <input type="text" value='-' className='form-control-plaintext mt-3' disabled />
-                  </div>
-                  <div className='col-5'>
-                <label htmlFor='max' className='form-label mt-3'>Max</label>
-                    <input type="number" id='max' value={max} onChange={handleMax} className='form-control' />
-                  </div>
-                </div>
-                <div>
-                  <label htmlFor='merchant' className='form-label mt-3'>Merchant</label>
-                  <input list="merchants" id="merchant" value={merchant} onChange={(e) => setMerchant(e.target.value)} onSelect={selectMerchant} onBlur={handleMerchant} className="form-control" />
-                  <datalist id='merchants'>
-                    <option value='Shuttle' />
-                    <option value='Fast food' />
-                    <option value='Electronics' />
-                    <option value='Restaurant' />
-                    <option value="Breakfast" />
-                    <option value="Parking" />
-                    <option value="Office supplies" />
-                    <option value="Rental car" />
-                    <option value="Hotel" />
-                    <option value="Taxi" />
-                    <option value="Ride sharing" />
-                    <option value="Airline" />
-                  </datalist>
-                </div>
-            <div className="mt-3">
-              Status
-              <div className="row mb-2">
-                <div className="col-3">
-                  <label>
-                    <input type="checkbox" checked={newStatus} onChange={handleNewStatus} className="form-check-input" /> New
-                  </label>
-                </div>
-                <div className="col-5">
-                    <label>
-                    <input type="checkbox" checked={inProgressStatus} onChange={handleInProgressStatus} className="form-check-input" /> In Progress
-                    </label>
-                  </div>
-              </div>
-              <div>
-                <label>
-                  <input type="checkbox" checked={reimbursedStatus} onChange={handleReimbursedStatus} className="form-check-input" /> Reimbursed
-                </label>
-              </div>
-              
+      {/* Show on Mobile Devices and other Small Screens */}
+      <div className="d-lg-none">
+        <div className="row text-start">
+          <div className="d-flex justify-content-between bg-grey py-1">
+            <div className="col ">
+              <small>To be reimbursed</small>
+              <br />
+              ${
+                employeeExpenses.filter(
+                  (a) => a.status === "New"
+                ).reduce((x, y) => x + y.total, 0).toFixed(2)
+              }
             </div>
-              </form>
+            <div className="col text-end text-primary mt-3 navbar-toggler" data-bs-toggle="collapse" data-bs-target="#collapsibleForm">
+              Filters <FontAwesomeIcon icon={faBars} />
+            </div>
+          </div> 
+          <div className="collapse navbar-collapse bg-grey" id="collapsibleForm">
+            {myForm}
           </div>
+        </div> 
+      </div>
+
+      {/* Show on Large Screens */}
+      <div className='row text-start'>
+        <div className='col-3 d-none d-lg-block'>
+           {myForm}   
+        </div>
         <div className='col-lg-7 d-none d-lg-table'>
           <div className="table-responsive">
             <table className='table'>
