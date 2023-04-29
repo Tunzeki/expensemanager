@@ -1867,8 +1867,8 @@ function App() {
           <div className="container-fluid">
             <span className="navbar-brand">Expense Manager</span>
             <div>
-              <button type="button" className="btn btn-secondary text-primary me-3">INFO</button>
-              <button type="button" className="btn btn-secondary text-primary">LOGOUT</button>
+              <button type="button" className="btn btn-secondary text-primary me-3 navbar-btn">INFO</button>
+              <button type="button" className="btn btn-secondary text-primary navbar-btn">LOGOUT</button>
             </div>
           </div>
         </nav>

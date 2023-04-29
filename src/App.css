@@ -129,3 +129,8 @@
 .w-16 {
   min-width: 16em;
 }
+
+.navbar-btn {
+  padding-left: 0.45rem;
+  padding-right: 0.45rem;
+}
