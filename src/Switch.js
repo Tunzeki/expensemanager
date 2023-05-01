@@ -12,8 +12,8 @@ const Switch = () => {
                 checked={theme === "light"}
                 onChange={toggleTheme}
             />
-            {theme === "light" ? <FontAwesomeIcon style={{ color: "white", paddingLeft: "10px", paddingTop: "13px" }} icon={faMoon} />
-                : <FontAwesomeIcon style={{ color: "white", paddingLeft: "10px", paddingTop: "13px" }} icon={faSun} />} 
+            {theme === "light" ? <FontAwesomeIcon className="pointer-cursor" style={{ color: "white", paddingLeft: "10px", paddingTop: "13px" }} icon={faMoon} />
+                : <FontAwesomeIcon className="pointer-cursor" style={{ color: "white", paddingLeft: "10px", paddingTop: "13px" }} icon={faSun} />} 
         </label>
     );
 };
