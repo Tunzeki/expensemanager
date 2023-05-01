@@ -1,5 +1,6 @@
 import { useTheme } from './ThemeContext';
 import './App.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 
 const Switch = () => {
@@ -11,7 +12,8 @@ const Switch = () => {
                 checked={theme === "light"}
                 onChange={toggleTheme}
             />
-            {theme === "light" ? <FontAwesomeIcon icon={faMoon} /> : <FontAwesomeIcon icon={faSun} /> } 
+            {theme === "light" ? <FontAwesomeIcon style={{ color: "white" }} icon={faMoon} />
+                : <FontAwesomeIcon style={{ color: "white" }} icon={faSun} />} 
         </label>
     );
 };
