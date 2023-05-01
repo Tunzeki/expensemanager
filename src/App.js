@@ -4,6 +4,8 @@ import employeeExpenses from './ExpensesList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortAsc, faSortDesc, faCirclePlus, faBars } from '@fortawesome/free-solid-svg-icons';
 import AddExpenseModal from './AddExpenseModal';
+import { ThemeProvider, useTheme } from "./ThemeContext";
+import Header from './Header';
 
 // This component visually shows Date and a `sort ascending` icon
 const DateSortAscIcon = () => {
@@ -171,6 +173,7 @@ const CommentSortUpDownIcon = () => {
 };
 
 function ExpensesForm() {
+  const { theme } = useTheme();
   // Declare state variables needed for the Form on the page
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -1678,7 +1681,7 @@ function ExpensesForm() {
   );
 
   const myTable = (
-    <table className='table'>
+    <table className='table' style={{ color: theme === "light" ? "black" : "white", }}>
       <thead>
         <tr>
           <th className="w-8" onClick={sortDate}>
@@ -1731,7 +1734,7 @@ function ExpensesForm() {
 
 
   return (
-    <div className='container-fluid mt-70'>
+    <div className='container-fluid mt-70' style={{ color: theme === "light" ? "black" : "white", }}>
       {/* Show on Mobile Devices and other Small Screens */}
       <div className="d-lg-none">
         <div className="row text-start">
@@ -1860,19 +1863,14 @@ function ExpensesForm() {
 }
 
 function App() {
-  return (
-    <div className="App">
-      <div>
-        <nav className="navbar bg-dark navbar-dark py-3 pos-fixed">
-          <div className="container-fluid">
-            <span className="navbar-brand">Expense Manager</span>
-            <div>
-              <button type="button" className="btn btn-secondary text-primary me-3 navbar-btn">INFO</button>
-              <button type="button" className="btn btn-secondary text-primary navbar-btn">LOGOUT</button>
-            </div>
-          </div>
-        </nav>
+  const { theme } = useTheme();
 
+  return (
+    <div className="App" style={{
+      backgroundColor: theme === "light" ? "white" : "black",
+    }}>
+      <div>
+        <Header />
         <ExpensesForm />
       </div>
       
@@ -1880,4 +1878,12 @@ function App() {
   );
 }
 
-export default App;
+function Root() {
+  return (
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
+  );
+}
+
+export default Root;
