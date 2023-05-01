@@ -134,3 +134,18 @@
   padding-left: 0.45rem;
   padding-right: 0.45rem;
 }
+
+.switch {
+  position: absolute;
+  display: inline-block;
+  right: 32px;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
