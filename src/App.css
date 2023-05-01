@@ -135,14 +135,6 @@
   padding-right: 0.45rem;
 }
 
-.switch {
-  position: absolute;
-  display: inline-block;
-  right: 32px;
-  width: 60px;
-  height: 34px;
-}
-
 /* Hide default HTML checkbox */
 .switch input {
   opacity: 0;
