@@ -39,7 +39,7 @@
 
 .btn-unstyled {
   border-style: none;
-  background-color: #fff;
+  background-color: inherit;
 }
 
 .table-responsive {
