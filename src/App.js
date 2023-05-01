@@ -4,7 +4,7 @@ import employeeExpenses from './ExpensesList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortAsc, faSortDesc, faCirclePlus, faBars } from '@fortawesome/free-solid-svg-icons';
 import AddExpenseModal from './AddExpenseModal';
-import { ThemeProvider, useTheme } from "./ThemeContext";
+import { ThemeProvider, useTheme } from './ThemeContext';
 import Header from './Header';
 
 // This component visually shows Date and a `sort ascending` icon
